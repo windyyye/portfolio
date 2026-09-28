@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('log')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+<BaseLayout
+  title="Build log"
+  description="Short dated notes on building this site: decisions, bugs, and prompts that worked or failed."
+>
+  <h1>Build log</h1>
+  <p>Short dated notes on how this site gets made — decisions, bugs, and prompts that worked or failed.</p>
+  <ul class="post-list">
+    {
+      posts.map((post) => (
+        <li>
+          <a href={`/log/${post.id}/`}>{post.data.title}</a>
+          <time datetime={post.data.date.toISOString().slice(0, 10)}>
+            {formatDate(post.data.date)}
+          </time>
+          {post.data.summary && <p>{post.data.summary}</p>}
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>
+
+<style>
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .post-list li {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e2e2df;
+  }
+
+  time {
+    display: block;
+    color: #555555;
+    font-size: 0.9rem;
+  }
+</style>

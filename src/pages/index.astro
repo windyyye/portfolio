@@ -1,24 +1,38 @@
 ---
 /**
- * Temporary stand-in home page so `npm run build` works.
- * Issue #2 replaces this with the shared layout and real placeholder pages.
+ * Home — placeholder copy for week 1; real copy lands in week 2.
  */
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../config';
+
+const offers = [
+  'Frontend development',
+  'QA testing',
+  'Agentic coding — setting up and directing AI coding agents',
+];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{site.name}</title>
-    <meta name="description" content={site.description} />
-  </head>
-  <body>
-    <main>
-      <h1>{site.name}</h1>
-      <p>{site.tagline}</p>
-      <p>Scaffold in progress — placeholder pages land in issue #2.</p>
-    </main>
-  </body>
-</html>
+<BaseLayout title="Home">
+  <h1>{site.name}</h1>
+  <p class="tagline">{site.tagline}</p>
+  <p>
+    I'm an early-career freelancer. I write the plan, direct AI coding agents to build it, and
+    check every result myself. This site is the first proof: every commit, decision, and mistake
+    is in the repo.
+  </p>
+  <h2>What I do</h2>
+  <ul>
+    {offers.map((offer) => <li>{offer}</li>)}
+  </ul>
+  <p>
+    <a href="/contact/">Get in touch</a> or <a href="/log/">read the build log</a> to see how this
+    site is being made.
+  </p>
+</BaseLayout>
+
+<style>
+  .tagline {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+</style>

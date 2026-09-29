@@ -1,4 +1,7 @@
 ---
+/**
+ * Build log index — DESIGN.md §5: hairline rows, title left, mono date right.
+ */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
@@ -14,38 +17,60 @@ const formatDate = (date: Date) =>
   title="Build log"
   description="Short dated notes on building this site: decisions, bugs, and prompts that worked or failed."
 >
-  <h1>Build log</h1>
-  <p>Short dated notes on how this site gets made — decisions, bugs, and prompts that worked or failed.</p>
-  <ul class="post-list">
-    {
-      posts.map((post) => (
-        <li>
-          <a href={`/log/${post.id}/`}>{post.data.title}</a>
-          <time datetime={post.data.date.toISOString().slice(0, 10)}>
-            {formatDate(post.data.date)}
-          </time>
-          {post.data.summary && <p>{post.data.summary}</p>}
-        </li>
-      ))
-    }
-  </ul>
+  <section class="section">
+    <div class="container">
+      <p class="label">Build log</p>
+      <h1>Notes from the build</h1>
+      <p class="measure text-muted">
+        Short dated notes on how this site gets made — decisions, bugs, and prompts that worked
+        or failed.
+      </p>
+      <ul class="post-list">
+        {
+          posts.map((post) => (
+            <li>
+              <a class="post-row" href={`/log/${post.id}/`}>
+                <span class="post-title">{post.data.title}</span>
+                <time
+                  class="mono text-muted"
+                  datetime={post.data.date.toISOString().slice(0, 10)}
+                >
+                  {formatDate(post.data.date)}
+                </time>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
   .post-list {
     list-style: none;
-    margin: 0;
+    margin: 2rem 0 0;
     padding: 0;
+    border-bottom: 1px solid var(--color-border);
   }
 
-  .post-list li {
-    padding: 1rem 0;
-    border-bottom: 1px solid #e2e2df;
+  .post-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 2rem;
+    padding: 1rem 0.5rem;
+    text-decoration: none;
+    transition: background-color var(--transition);
   }
 
-  time {
-    display: block;
-    color: #555555;
-    font-size: 0.9rem;
+  .post-row:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .post-title {
+    font-weight: 500;
   }
 </style>

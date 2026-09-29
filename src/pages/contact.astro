@@ -1,0 +1,22 @@
+---
+/**
+ * Contact — real content from day one: links and time zone.
+ * TODO(Windy): email and LinkedIn are placeholders from src/config.ts.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { links, site } from '../config';
+---
+
+<BaseLayout
+  title="Contact"
+  description={`How to reach ${site.name}: email, GitHub, and LinkedIn. Based in Malaysia (UTC+8).`}
+>
+  <h1>Contact</h1>
+  <p>Fastest way to reach me is email. I'm in Malaysia (UTC+8) and reply within a day.</p>
+  <ul>
+    <li><a href={links.email}>Email</a></li>
+    <li><a href={links.github}>GitHub</a></li>
+    <li><a href={links.linkedin}>LinkedIn</a></li>
+  </ul>
+  <p>An Upwork profile will be linked here once it's live.</p>
+</BaseLayout>

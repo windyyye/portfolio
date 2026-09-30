@@ -132,6 +132,11 @@ The site is honest, so its images are too. Morflax-style visuals with none of th
   output, or Windy's own photos. No stock photos, no AI-generated scenes, no images implying
   clients, teams, or work that doesn't exist. If an image can't be traced to something real,
   it doesn't ship.
+- **Programmatic art:** brand graphics may be rendered from committed scripts (`scripts/`),
+  e.g. a Three.js scene exported to a static image. The script is the provenance — anyone can
+  re-run it and get the same output. Rules: monochrome output, decorative only (never implies
+  client work or product features), and the rendered image is reviewed by Windy before it
+  ships.
 - **Monochrome enforced:** every image gets `filter: grayscale(100%)` in CSS — originals stay
   untouched on disk, the page renders grayscale, per §2.
 - **Presentation:** hairline border, `0` radius, explicit `width`/`height` (no layout shift),

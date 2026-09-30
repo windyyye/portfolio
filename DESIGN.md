@@ -113,7 +113,7 @@ Body text measures at most `65ch`. Sentence case everywhere except micro-labels 
 
 ## 8. Page layouts
 
-- **Home** — hero (headline + tagline) → "WHAT I DO" offer cards → "LATEST" single newest
+- **Home** — hero (headline + tagline) → "WHAT I DO" offer cards → "THE PROOF" imagery section (§9) → "LATEST" single newest
   log entry + link to `/log/` → contact CTA (primary button).
 - **Work** — mono label + H1, intro sentence, then the honest case-study list (kept simple
   until real case studies exist in week 4).
@@ -124,7 +124,24 @@ Body text measures at most `65ch`. Sentence case everywhere except micro-labels 
 - **Contact** — link list styled as rows (label in mono muted left, value right), primary
   email button, timezone note.
 
-## 9. Do / Don't
+## 9. Imagery
+
+The site is honest, so its images are too. Morflax-style visuals with none of the fiction.
+
+- **Real sources only:** screenshots of this site, its public repo (issues/PR graph), build
+  output, or Windy's own photos. No stock photos, no AI-generated scenes, no images implying
+  clients, teams, or work that doesn't exist. If an image can't be traced to something real,
+  it doesn't ship.
+- **Monochrome enforced:** every image gets `filter: grayscale(100%)` in CSS — originals stay
+  untouched on disk, the page renders grayscale, per §2.
+- **Presentation:** hairline border, `0` radius, explicit `width`/`height` (no layout shift),
+  `loading="lazy"` below the fold, and a mono micro-caption directly below
+  (e.g. `LIVE SITE — 2026-09-29`).
+- **Files:** `public/images/`, named by subject and date (`home-site-2026-09-29.png`).
+- **Portrait slot:** the About page reserves a place for a real photo of Windy. Until one
+  exists, no placeholder person, no avatar silhouette.
+
+## 10. Do / Don't
 
 **Do** use the tokens; keep corners square; underline links; label sections in mono
 uppercase; let headlines be huge; keep copy first-person and plain.

@@ -4,3 +4,4 @@ dist
 .env*
 .firebase
 firebase-debug.log
+.playwright-cli/

@@ -1,125 +1,108 @@
-# Portfolio v1 specification
+# Portfolio v2 specification
+
+Supersedes the v1 specification (a client-facing freelance portfolio). Per issue #21, the
+objective has changed; v1's positioning survives as narratable history — the site's own
+pivot is part of the story it tells. v1 remains readable in Git history.
+
+Design decisions for this rewrite are grounded in `docs/research/revamp-inspiration.md`
+(the archetype sweep) and recorded in `docs/decisions/002-illustrated-css-craft.md`.
 
 ## Purpose and audience
 
-The site should get freelance clients to trust Windy enough to reach out. It is also a documented build for practising technical and writing skills, and a way to maintain honest, steady GitHub activity.
+The site is a personal project done for fun and self-expression: a **digital diary that
+narrows into Windy's career**. It is not marketing and not a showcase. It exists to be a
+place where Windy thinks in public, keeps a record of what she makes and learns, and enjoys
+the making itself.
 
-The main reader is a potential freelance client skimming for about one minute. Peers and connections are a secondary audience.
+The primary reader is **Windy**. Peers, friends, and casual visitors are a welcome secondary
+audience; potential clients or recruiters are not a designed-for audience (nothing needs to
+repel them — the site simply does not optimize for them).
+
+Success in one line: Windy enjoys writing here, and the site feels unmistakably hers.
 
 ## Positioning and honesty
 
-Working headline idea:
+The site is a career journal — an ongoing, dated, first-person record of building, learning,
+and changing direction. It is honest about being in progress; unfinished work and reversed
+decisions are content, not embarrassments.
 
-> Frontend and QA, built with AI agents. I design the plan, direct the agents, and check every result.
+The v1 portfolio (freelance positioning, offer cards, "how I work" pitch) is no longer a
+goal. It remains part of the site's history and may be narrated as such — the pivot from
+"get clients" to "for fun" is itself a diary entry waiting to happen.
 
-Windy is early in her career, with university and internship experience. The site must never invent clients, outcomes, or metrics. It should be open about the use of AI agents and explain where human direction and review happen.
+The honesty bar carries over unchanged: **never invent clients, outcomes, metrics, or
+experience.** Flag uncertainty instead of guessing.
 
-The brand name is a working name. Keep the name, colours, and fonts in one configuration location so they can be changed without searching through pages.
+## Voice and tone
 
-## Pages and content
+First person, warm, plain-English, and funny where funny is available — humor lives
+especially in the small text: captions, footnotes, marginal notes, tag lines. Serious
+content stays serious; the voice never tips into performance.
 
-### Home
+## Content model
 
-- Headline and short introduction
-- Three offer cards: Frontend, QA testing, and Agentic builds
-- Latest build-log entry
-- Clear contact button
+- **Journal entries** — the core unit: dated, first-person posts about building, learning,
+  and deciding. Entries carry a growth stage (e.g. seedling → budding → evergreen) rather
+  than pretending to be finished articles; reversing or superseding an older entry is normal
+  and linked.
+- **Makes** — things built (including this site), written up as part of the story: what it
+  is, what was learned, what went wrong. Problem/agent/verification framing from v1 may
+  appear inside entries where relevant, but not as sales structure.
+- **The pivot** — v1's history and the objective change are narratable content.
 
-### Work
+What happens to existing v1 pages (removed, rewritten, or reframed) is an implementation-phase
+decision under #21, made deliberately per page. This spec acknowledges the question; it does
+not settle it.
 
-Project cards should explain:
+## Visual direction (summary)
 
-- The problem
-- What the agents were directed to do
-- What was checked
-- What was learned
-- A repository link
+The full system is future work — a v2 `DESIGN.md`, to be written against the research
+constraints before implementation. Direction in one line: **an illustrated garden with book
+craft, in color** — a cohesive illustrated personal system; masthead, table-of-contents-style
+navigation, numbered entries and edition rituals, paper texture; a soft, confident palette;
+wit in the small text. Near-zero motion. Hand-drawn or programmatic art committed to the
+repository. See `docs/decisions/002-illustrated-css-craft.md` for the technology decisions
+and `docs/research/revamp-inspiration.md` for the evidence.
 
-Launch with this portfolio site and, optionally, the `buttercakerice.web.app` checklist app.
-
-### How I work
-
-Explain the workflow: specification, prompting, review, testing, and where the human decides.
-
-### Build log
-
-Publish dated Markdown posts. Content is stored in `src/content/log/`.
-
-### About
-
-Cover university, internship, interests, why freelancing, and the direction Windy is taking. Frame the early-career stage positively without overstating experience.
-
-### Other ways I help
-
-Include virtual assistance and English/Malay tutoring for kindergarten and primary pupils.
-
-### Contact
-
-Provide email, LinkedIn, GitHub, and later Upwork. Use a `mailto` link or a simple form. State Malaysia time zone (UTC+8).
+v1 `DESIGN.md` is frozen and must not be extended for new work.
 
 ## Technology and quality bar
 
-- Astro static site
-- Markdown content
-- Firebase Hosting on the `windye` project
-- `omaopoao.com` as the custom domain
-- Contact via `mailto` or a free form service; no backend in v1
+Unchanged from v1 and re-affirmed by ADR 002:
 
-The site should be mobile-friendly, target Lighthouse 90+, meet basic accessibility expectations, and include a title and description on every page.
+- Astro static site, Markdown content
+- Firebase Hosting on the `windye` project, `omaopoao.com` custom domain
+- No backend; free tiers only; no paid assets or services
+- Mobile-friendly, accessible (non-negotiable), fast — Lighthouse 90+ target retained
+- Title and description on every page
 
 ## GitHub plan
 
-- Keep one public repository.
-- Use one issue per feature.
-- Use a branch and pull request for each change, then merge to `main`.
-- Use a commit email linked to the GitHub account.
-- Have three or four useful sessions per week, with no empty commits.
-- Keep a useful README.
+Carried over from v1 without change: one public repository, one issue per feature, branch
+and pull request per change, no empty commits, useful README. The agent playbook
+(`docs/agent-playbook.md`) governs execution.
 
 ## Documentation
 
-The repository should contain:
-
-- `README.md`
-- `docs/spec.md`
-- `docs/decisions/`
-- `docs/agent-playbook.md`
-- `CHANGELOG.md`
+The repository contains: `README.md`, `docs/spec.md`, `docs/research/`, `docs/decisions/`,
+`docs/agent-playbook.md`, `CHANGELOG.md`, and (once written) v2 `DESIGN.md`.
 
 ## Milestones
 
-### Week 1 — 28 September to 4 October 2026
+v1's weekly milestone table is obsolete. Implementation phases for the revamp are set under
+issue #21 once the v2 design system exists. Each phase ships as its own branch and pull
+request.
 
-Repository, Astro skeleton, Firebase deploy, domain, and README.
+## Definition of done (v2)
 
-### Week 2
+- The diary exists and is live on `omaopoao.com`, and Windy enjoys maintaining it.
+- The site feels like a cohesive illustrated book that could belong to no one else.
+- Every claim is true; the v1 honesty bar holds.
+- The visual system is written down in v2 `DESIGN.md` and followed exactly.
 
-Home, About, and Contact with real copy.
+## Out of scope for v2
 
-### Week 3
-
-How I work and two build-log posts.
-
-### Week 4
-
-Work page with one or two honest case studies, polish, Lighthouse check, and a `v1.0` tag.
-
-### After v1
-
-Publish a weekly build-log post, make a small project roughly monthly, and add the Upwork link once it is live.
-
-## Definition of done
-
-- The site is live on `omaopoao.com`.
-- A stranger knows within 30 seconds what Windy offers and how to reach her.
-- Every claim is true.
-- The repository shows at least four weeks of real issues, pull requests, and documentation work.
-
-## Out of scope for v1
-
-- CMS
-- Dark-mode toggle
-- Animations
-- Analytics dashboards
-- Multiple languages
-- A separate tutoring site
+- Client acquisition: offer cards, conversion goals, Upwork links, "hire me" surfaces
+- Backend, CMS, paid services, analytics beyond free basics
+- WebGL, canvas experiments, animation-heavy pages (see ADR 002)
+- Redesigning other projects; the revamp covers this site only

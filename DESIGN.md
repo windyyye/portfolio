@@ -1,5 +1,10 @@
 # DESIGN.md — visual source of truth
 
+> **Status: frozen (2026-10-01).** This file describes the v1 design system and is
+> superseded by the #21 revamp. Do not extend these rules for new work; a v2 design
+> system will be written against `docs/research/revamp-inspiration.md` and the v2
+> `docs/spec.md` before implementation.
+
 One file describing how this site looks. Any agent or human editing UI reads this first and
 follows it exactly. Product scope lives in `docs/spec.md`; this file owns appearance and
 interaction feel. When this file and improvisation disagree, this file wins.

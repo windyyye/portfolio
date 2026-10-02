@@ -1,182 +1,90 @@
 ---
 /**
- * Home — implements DESIGN.md §8:
- * hero → WHAT I DO offer cards → LATEST log entry → contact CTA.
+ * Home — DESIGN.md §8: tall masthead, one-line diary intro, dotted-leader TOC
+ * of the latest entries. No offer cards, no conversion goals (spec v2).
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../config';
 
-const offers = [
-  {
-    id: '01',
-    label: 'Frontend',
-    title: 'Frontend development',
-    description: 'Clean, fast, accessible sites and interfaces.',
-  },
-  {
-    id: '02',
-    label: 'QA testing',
-    title: 'QA testing',
-    description: 'Manual checks that catch what automation misses.',
-  },
-  {
-    id: '03',
-    label: 'Agentic builds',
-    title: 'Agentic coding',
-    description: 'AI agents do the building, under my direction.',
-  },
-];
+const entries = (await getCollection('log')).sort(
+  (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
+);
 
-const latestPost = (await getCollection('log')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-)[0];
+// Newest first for display; numbers stay tied to creation order.
+const numbered = entries
+  .map((entry, index) => ({ entry, number: index + 1 }))
+  .reverse()
+  .slice(0, 5);
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+const entryNo = (n: number) => `No. ${String(n).padStart(3, '0')}`;
 ---
 
-<BaseLayout title="Home">
-  <section class="hero">
+<BaseLayout title="Home" tall>
+  <section class="section">
     <div class="container">
-      <h1 class="hero-title">{site.name}</h1>
-      <p class="text-lead measure">{site.tagline}</p>
-    </div>
-  </section>
+      <p class="intro measure">{site.tagline}</p>
+      <p class="margin-note">Vol. I — wander anywhere. — W.</p>
 
-  <section class="section" aria-labelledby="what-i-do">
-    <div class="container">
-      <p class="label" id="what-i-do">What I do</p>
-      <h2 class="screen-reader-only">What I do</h2>
-      <ul class="offers">
+      <h2 class="toc-heading label">In this volume</h2>
+      <ul class="toc">
         {
-          offers.map((offer) => (
-            <li class="offer">
-              <p class="label">{offer.id} / {offer.label}</p>
-              <h3>{offer.title}</h3>
-              <p class="text-muted">{offer.description}</p>
+          numbered.map(({ entry, number }) => (
+            <li>
+              <a class="toc-row" href={`/log/${entry.id}/`}>
+                <span class="mono num">{entryNo(number)}</span>
+                <span class="toc-title">{entry.data.title}</span>
+                <span class="leader" aria-hidden="true" />
+                <span class="numeral">{formatDate(entry.data.date)}</span>
+              </a>
             </li>
           ))
         }
-      </ul>
-    </div>
-  </section>
-
-  {
-    latestPost && (
-      <section class="section section-ruled" aria-labelledby="latest">
-        <div class="container">
-          <p class="label" id="latest">Latest</p>
-          <h2 class="screen-reader-only">Latest from the build log</h2>
-          <a class="latest-link" href={`/log/${latestPost.id}/`}>
-            <span class="latest-title">{latestPost.data.title}</span>
-            <time
-              class="mono text-muted"
-              datetime={latestPost.data.date.toISOString().slice(0, 10)}
-            >
-              {formatDate(latestPost.data.date)}
-            </time>
+        <li>
+          <a class="toc-row" href="/log/">
+            <span class="toc-title">The whole journal →</span>
+            <span class="leader" aria-hidden="true" />
+            <span class="numeral">I</span>
           </a>
-          <p class="text-muted measure">{latestPost.data.summary}</p>
-          <p><a href="/log/">Read the build log</a></p>
-        </div>
-      </section>
-    )
-  }
-
-  <section class="section section-ruled" aria-labelledby="contact-cta">
-    <div class="container">
-      <p class="label" id="contact-cta">Contact</p>
-      <h2 class="screen-reader-only">Contact</h2>
-      <p class="measure">
-        The fastest way to reach me is email. I'm in Malaysia (UTC+8) and reply within a day.
-      </p>
-      <a class="btn btn-primary" href="/contact/">Get in touch</a>
+        </li>
+      </ul>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .hero {
-    border-bottom: 1px solid var(--color-border);
-    padding-block: clamp(4rem, 12vw, 8rem);
+  .intro {
+    font-size: 1.35rem;
+    line-height: 1.5;
+    max-width: 38ch;
+    margin-block: var(--space-4) var(--space-2);
   }
 
-  .hero-title {
-    font-size: clamp(2.75rem, 7vw, 5.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 1.5rem;
+  .margin-note {
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    color: var(--ink-70);
+    transform: rotate(-1.5deg);
+    margin: 0 0 var(--space-5);
   }
 
-  .screen-reader-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-    border: 0;
+  .toc-heading {
+    margin-bottom: var(--space-2);
   }
 
-  .section {
-    padding-block: clamp(3rem, 8vw, 6rem);
+  .num {
+    color: var(--ink-70);
   }
 
-  .section-ruled {
-    border-top: 1px solid var(--color-border);
-  }
-
-  .offers {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-
-  .offer {
-    border: 1px solid var(--color-border);
-    padding: 1.5rem;
-    transition: background-color var(--transition);
-  }
-
-  .offer:hover {
-    background: var(--color-surface);
-  }
-
-  .offer p:last-child {
-    margin-bottom: 0;
-  }
-
-  .latest-link {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 0.5rem 2rem;
-    padding-block: 1rem;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-    text-decoration: none;
-    transition: background-color var(--transition);
-  }
-
-  .latest-link:hover {
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
-
-  .latest-title {
-    font-weight: 500;
-  }
-
-  @media (max-width: 640px) {
-    .offers {
-      grid-template-columns: 1fr;
+  @media (min-width: 1100px) {
+    .margin-note {
+      position: absolute;
+      right: 4vw;
+      top: var(--space-6);
+      max-width: 14ch;
     }
   }
 </style>

@@ -1,42 +1,46 @@
 ---
 /**
- * Build log index — DESIGN.md §5: hairline rows, title left, mono date right.
+ * Journal index — DESIGN.md §8: the full TOC of entries,
+ * `No. . . . title . . . date . . . stage`.
  */
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Stamp from '../../components/Stamp.astro';
 
-const posts = (await getCollection('log')).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+const entries = (await getCollection('log')).sort(
+  (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
 );
+
+const numbered = entries.map((entry, index) => ({ entry, number: index + 1 })).reverse();
 
 const formatDate = (date: Date) =>
   date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+const entryNo = (n: number) => `No. ${String(n).padStart(3, '0')}`;
 ---
 
 <BaseLayout
-  title="Build log"
-  description="Short dated notes on building this site: decisions, bugs, and prompts that worked or failed."
+  title="Journal"
+  description="The journal: dated entries on building, learning, and deciding — in progress and in public."
 >
   <section class="section">
-    <div class="container">
-      <p class="label">Build log</p>
-      <h1>Notes from the build</h1>
-      <p class="measure text-muted">
-        Short dated notes on how this site gets made — decisions, bugs, and prompts that worked
-        or failed.
-      </p>
-      <ul class="post-list">
+    <div class="container measure-wide">
+      <p class="label">Vol. I · the journal</p>
+      <h1>Everything so far</h1>
+      <ul class="toc">
         {
-          posts.map((post) => (
+          numbered.map(({ entry, number }) => (
             <li>
-              <a class="post-row" href={`/log/${post.id}/`}>
-                <span class="post-title">{post.data.title}</span>
-                <time
-                  class="mono text-muted"
-                  datetime={post.data.date.toISOString().slice(0, 10)}
-                >
-                  {formatDate(post.data.date)}
-                </time>
+              <a class="toc-row" href={`/log/${entry.id}/`}>
+                <span class="mono num">{entryNo(number)}</span>
+                <span class="toc-title">{entry.data.title}</span>
+                <span class="leader" aria-hidden="true" />
+                {entry.data.stage && (
+                  <span class="stage">
+                    <Stamp stage={entry.data.stage} tone={number % 2 === 0 ? 'blue' : 'pink'} />
+                  </span>
+                )}
+                <span class="numeral">{formatDate(entry.data.date)}</span>
               </a>
             </li>
           ))
@@ -47,30 +51,13 @@ const formatDate = (date: Date) =>
 </BaseLayout>
 
 <style>
-  .post-list {
-    list-style: none;
-    margin: 2rem 0 0;
-    padding: 0;
-    border-bottom: 1px solid var(--color-border);
+  .measure-wide {
+    max-width: 72ch;
   }
 
-  .post-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 0.5rem 2rem;
-    padding: 1rem 0.5rem;
-    text-decoration: none;
-    transition: background-color var(--transition);
-  }
-
-  .post-row:hover {
-    background: var(--color-surface);
-    color: var(--color-text);
-  }
-
-  .post-title {
-    font-weight: 500;
+  .num,
+  .numeral {
+    color: var(--ink-70);
+    white-space: nowrap;
   }
 </style>

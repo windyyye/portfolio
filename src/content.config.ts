@@ -8,6 +8,8 @@ const log = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     summary: z.string().optional(),
+    /** Growth stage per spec v2 — seedling → budding → evergreen. Optional; entries are fine without one. */
+    stage: z.enum(['seedling', 'budding', 'evergreen']).optional(),
   }),
 });
 

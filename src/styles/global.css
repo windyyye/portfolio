@@ -1,31 +1,47 @@
 /*
- * Global styles — implements DESIGN.md (visual source of truth).
+ * Global styles — implements DESIGN.md v2 "Vol. I" (visual source of truth).
  * Tokens first; components use tokens, never raw hex values.
+ *
+ * Inks (§2): paper #FAF6EE · ink #2B2520 · fluoro pink #FF48B0 · riso blue #0078BF
+ * Type (§3): Fraunces (display) · Literata (body) · IBM Plex Mono (labels) · Caveat (marginalia)
  */
 
-@font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-Variable.woff2') format('woff2-variations');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
-  /* §2 Colors */
-  --color-bg: #fafaf7;
-  --color-text: #111110;
-  --color-text-muted: #6b6a66;
-  --color-border: #e3e2dd;
-  --color-surface: #f1f0eb;
+  /* §2 Colors — four inks, fixed roles */
+  --paper: #faf6ee;
+  --ink: #2b2520;
+  --pink: #ff48b0;
+  --blue: #0078bf;
+  --ink-70: color-mix(in srgb, var(--ink) 70%, transparent);
+  --ink-30: color-mix(in srgb, var(--ink) 30%, transparent);
+  --ink-20: color-mix(in srgb, var(--ink) 20%, transparent);
 
   /* §3 Type */
-  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'Literata Variable', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
+  --font-hand: 'Caveat Variable', 'Segoe Script', cursive;
 
-  /* §6 Motion */
-  --transition: 150ms ease;
+  /* Type scale */
+  --size-masthead: clamp(2.8rem, 8vw, 5.5rem);
+  --size-h1: clamp(1.9rem, 4vw, 2.6rem);
+  --size-h2: 1.75rem;
+  --size-h3: 1.25rem;
+  --size-body: 1.125rem;
+  --size-label: 0.8125rem;
+
+  /* §4 Spacing tokens */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4rem;
+  --space-7: 6rem;
+  --space-8: 8rem;
+
+  /* §6 Motion — near-zero, by law */
+  --transition: 180ms ease;
 }
 
 * {
@@ -34,65 +50,97 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
 }
 
 body {
   margin: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-  line-height: 1.6;
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: 1.7;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* §4 Paper grain — felt, not seen */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: color-mix(in srgb, var(--pink) 25%, transparent);
+}
+
 h1,
 h2,
 h3 {
+  font-family: var(--font-display);
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.12;
   letter-spacing: -0.01em;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--space-3);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--size-h1);
 }
 
 h2 {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  line-height: 1.15;
+  font-size: var(--size-h2);
 }
 
 h3 {
-  font-size: 1.125rem;
-  font-weight: 500;
-  line-height: 1.3;
+  font-size: var(--size-h3);
 }
 
 p {
-  margin: 0 0 1rem;
+  margin: 0 0 var(--space-3);
 }
 
 ul,
 ol {
-  margin: 0 0 1rem;
+  margin: 0 0 var(--space-3);
   padding-left: 1.25rem;
 }
 
-/* §5 Links */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* §5 Links — ink text, pink rough underline on hover */
 a {
-  color: var(--color-text);
+  color: var(--ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  text-decoration-color: var(--ink-30);
+  text-underline-offset: 4px;
   transition: color var(--transition);
 }
 
 a:hover {
-  color: var(--color-text-muted);
+  text-decoration: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6' viewBox='0 0 12 6'%3E%3Cpath d='M0.5 4.2 Q 2 2.2 4 3.6 T 8 3.4 T 11.5 3.8' fill='none' stroke='%23FF48B0' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: auto 5px;
+  padding-bottom: 3px;
 }
 
 /* §7 Accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-text);
+  outline: 2px solid var(--blue);
   outline-offset: 2px;
 }
 
@@ -102,11 +150,12 @@ a:hover {
 }
 
 .skip-link:focus {
-  left: 1rem;
-  top: 1rem;
+  left: var(--space-3);
+  top: var(--space-3);
   z-index: 10;
-  background: var(--color-bg);
-  padding: 0.75rem 1.5rem;
+  background: var(--paper);
+  border: 1.5px solid var(--ink);
+  padding: var(--space-2) var(--space-3);
 }
 
 /* §4 Layout */
@@ -121,72 +170,160 @@ a:hover {
   max-width: 65ch;
 }
 
+.section {
+  padding-block: var(--space-6);
+}
+
 /* §3 Micro-label */
 .label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--size-label);
   font-weight: 500;
   line-height: 1.2;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-text-muted);
-  margin: 0 0 0.75rem;
+  color: var(--ink-70);
+  margin: 0 0 var(--space-2);
 }
 
 /* Shared text styles */
-.text-lead {
-  font-size: 1.25rem;
-  line-height: 1.5;
-  color: var(--color-text-muted);
-}
-
 .text-muted {
-  color: var(--color-text-muted);
+  color: var(--ink-70);
 }
 
 .mono {
   font-family: var(--font-mono);
 }
 
-/* §5 Buttons */
+/* §5 TOC rows — dotted leaders, roman numerals, mono */
+.toc {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75ch;
+  padding-block: var(--space-2);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.toc-row .toc-title {
+  font-size: 1rem;
+  font-family: var(--font-body);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.toc-row .leader {
+  flex: 1;
+  border-bottom: 2px dotted var(--ink-30);
+  transform: translateY(-0.3em);
+  min-width: 2ch;
+}
+
+.toc-row .numeral {
+  color: var(--ink-70);
+}
+
+.toc-row:hover {
+  background-image: none;
+  padding-bottom: 0;
+}
+
+.toc-row:hover .toc-title {
+  color: var(--ink);
+  text-decoration: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6' viewBox='0 0 12 6'%3E%3Cpath d='M0.5 4.2 Q 2 2.2 4 3.6 T 8 3.4 T 11.5 3.8' fill='none' stroke='%23FF48B0' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: 0 100%;
+  background-size: auto 5px;
+  padding-bottom: 3px;
+}
+
+/* §5 Entry header — No. · date · stage */
+.entry-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--size-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-70);
+  margin: 0 0 var(--space-3);
+}
+
+/* §5 Growth stamps — hand-drawn SVG, mono label */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5ch;
+}
+
+.stamp svg {
+  width: 1.15em;
+  height: 1.15em;
+}
+
+/* §5 Buttons — ink-line pill, never filled accent blocks */
 .btn {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   padding: 12px 24px;
-  border: 1px solid var(--color-text);
-  border-radius: 0;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--size-label);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-decoration: none;
   transition:
-    background-color var(--transition),
     color var(--transition),
     border-color var(--transition);
 }
 
-.btn-primary {
-  background: var(--color-text);
-  color: var(--color-bg);
+.btn:hover {
+  border-color: var(--pink);
 }
 
-.btn-primary:hover {
-  background: var(--color-text-muted);
-  border-color: var(--color-text-muted);
-  color: var(--color-bg);
+/* §8 Prose — the reading voice */
+.prose {
+  max-width: 65ch;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: var(--color-text);
+.prose h2,
+.prose h3 {
+  margin-top: var(--space-5);
 }
 
-.btn-secondary:hover {
-  background: var(--color-surface);
-  color: var(--color-text);
+.prose img {
+  display: block;
+  border: 1.5px solid var(--ink);
+  margin-block: var(--space-4);
+}
+
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--pink);
+  font-style: italic;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 2px dotted var(--ink-30);
+  margin-block: var(--space-5);
 }
 
 /* §6 Motion — reduced motion honored */

@@ -1,0 +1,54 @@
+---
+/**
+ * Colophon — DESIGN.md §5/§8: the book's page of materials.
+ * Built with, set in, drawn from, kept honest.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { links, site } from '../config';
+---
+
+<BaseLayout
+  title="Colophon"
+  description="How this site is made: tools, type, imagery provenance, and licenses."
+>
+  <article class="section">
+    <div class="container measure">
+      <p class="label">Vol. I · colophon</p>
+      <h1>About this book</h1>
+
+      <h2>Built with</h2>
+      <p>
+        <a href="https://astro.build">Astro</a>, producing plain static pages. No trackers, no
+        ads, no analytics beyond what hosting itself sees. Deployed free on Firebase Hosting.
+      </p>
+
+      <h2>Set in</h2>
+      <p>
+        Fraunces (display), Literata (body), IBM Plex Mono (labels), and Caveat (marginalia) —
+        all under the SIL Open Font License, self-hosted via Fontsource.
+      </p>
+
+      <h2>Drawn from</h2>
+      <p>
+        Illustrations come from CC0 hand-drawn kits (Open Peeps, Open Doodles, Humaaans) and
+        Rough.js build-time accents, recolored into this site's ink set. Every asset's source
+        and license is recorded in <a href="https://github.com/windyyye/portfolio/blob/main/PROVENANCE.md">PROVENANCE.md</a>.
+        No AI-generated imagery.
+      </p>
+
+      <h2>Kept honest</h2>
+      <p>
+        Everything here is true, or marked as unfinished. The repository is public — issues,
+        pull requests and all — so the making of this site is part of the site. The edition
+        ritual: this is <em>Vol. I</em>; a future redesign becomes Vol. II when it sparks joy,
+        never on a schedule.
+      </p>
+
+      <h2>Elsewhere</h2>
+      <p>
+        <a href={links.github}>GitHub</a> · <a href={links.linkedin}>LinkedIn</a> ·
+        <a href={links.email}>Email</a> · {site.timezone}
+      </p>
+    </div>
+  </article>
+</BaseLayout>

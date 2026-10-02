@@ -1,166 +1,157 @@
 # DESIGN.md — visual source of truth
 
-> **Status: frozen (2026-10-01).** This file describes the v1 design system and is
-> superseded by the #21 revamp. Do not extend these rules for new work; a v2 design
-> system will be written against `docs/research/revamp-inspiration.md` and the v2
-> `docs/spec.md` before implementation.
+**v2 — "Vol. I" (2026).** Supersedes v1 (monochrome editorial minimalism, preserved in Git
+history and frozen on 2026-10-01). One file describing how this site looks. Any agent or
+human editing UI reads this first and follows it exactly. Product scope lives in
+`docs/spec.md`; research grounding lives in `docs/research/revamp-inspiration.md`; the
+technology decisions behind this system live in `docs/decisions/002-illustrated-css-craft.md`.
+When this file and improvisation disagree, this file wins.
 
-One file describing how this site looks. Any agent or human editing UI reads this first and
-follows it exactly. Product scope lives in `docs/spec.md`; this file owns appearance and
-interaction feel. When this file and improvisation disagree, this file wins.
+**Brand in one line:** Windy's career diary — an illustrated, cohesive personal garden with
+book craft, in color. A hand-illustrated almanac that could belong to no one else.
 
-**Brand in one line:** an early-career freelancer who directs AI coding agents — professional
-with a pulse, honest, plain-English. The design should feel like a well-set document, not a
-startup landing page.
-
-**Direction:** monochrome editorial minimalism (morflax-style structure), warmed by an
-off-white page, generous whitespace, and first-person copy. No accent color. No dark mode in v1.
+**Direction:** a designed book — warm cream paper, ink typography, table-of-contents
+navigation, numbered entries, a colophon — illustrated by a hand-drawn CC0 kit and colored
+with a limited riso-style ink set. Soft on the eyes, loud on the soul. Wit lives in the
+small text. Near-zero motion. $0, forever.
 
 ---
 
 ## 1. Design principles
 
-1. **Type is the interface.** Hierarchy comes from size, weight, and spacing — not color or boxes.
-2. **Hairlines over shadows.** Structure is drawn with 1px borders. No drop shadows, no glows.
-3. **Monochrome means it.** Grayscale only. If a design idea needs color to work, it's the wrong idea.
-4. **Space is a feature.** When in doubt, add whitespace instead of decoration.
-5. **Motion is feedback, not entertainment.** Things respond to the cursor; nothing moves on its own.
-6. **Every claim stays true.** Design may not imply clients, results, or scale that don't exist.
+1. **Cohesion over effects.** One system, carried everywhere. No effect is used once.
+2. **The book is the structure.** Masthead, TOC navigation, numbered entries, colophon,
+   Volume ritual. Structure carries the craft so decoration doesn't have to.
+3. **Color lives in the world, not the frame.** Ink-warm accents inside a paper system —
+   never hard neon outlines, never offset-shadow chunk, never full-bleed color floods.
+4. **Soul is visible personality.** Illustration, warmth, and wit — never plainness
+   justified as honesty.
+5. **Provenance is aesthetic.** Every image traces to something real: a CC0 library, a
+   committed script, a screenshot, or Windy's own photos. No AI-generated imagery.
+6. **It must stay cheap and fast.** CSS + committed SVG. No paid assets, no motion
+   libraries, no Lighthouse sacrifices for decoration.
 
 ## 2. Colors
 
-Grayscale with a warm tint. Defined once as CSS variables on `:root`; never hard-code a hex
-value in a component.
+A limited riso-style ink set on paper. Four inks, fixed roles, no others.
 
-| Token | Value | Use |
+| Ink | Hex | Role |
 |---|---|---|
-| `--color-bg` | `#FAFAF7` | Page background (warm off-white) |
-| `--color-text` | `#111110` | Headlines, body text, primary buttons |
-| `--color-text-muted` | `#6B6A66` | Dates, labels, footer, secondary text |
-| `--color-border` | `#E3E2DD` | All 1px hairlines |
-| `--color-surface` | `#F1F0EB` | Hover fills, subtle backgrounds |
+| **Paper** | `#FAF6EE` | Site background, everywhere. Subtle grain overlay (§4). |
+| **Ink** | `#2B2520` | All body text, headings, ink-line borders, primary doodle linework. |
+| **Fluoro pink** | `#FF48B0` | Accent ink: link underlines, hover states, doodle fills, stamps, marginalia leaders, selection tint. |
+| **Riso blue** | `#0078BF` | Second accent: focus outlines, alternating tag stamps, secondary doodle fills, quiet highlights. |
 
-- Contrast: body text ≥ 4.5:1 on `--color-bg`; muted text ≥ 4.5:1 (both pass).
-- No other colors. Links use `--color-text` with underline, not a colored accent.
+Derived, not new inks: secondary text is Ink at ~70% opacity; hairlines are Ink at ~20%.
+
+**Usage rules (eye-safety is law):**
+- Accents are **details, never surfaces.** No pink or blue backgrounds larger than a stamp.
+- Pink is never used for body-size text (contrast on paper fails WCAG). Pink is for
+  underlines, graphics, stamps, and display-size accents only.
+- Blue text on paper passes AA at large sizes; for small blue text, verify AA before use.
+- Text selection: Fluoro pink at ~25% opacity.
 
 ## 3. Typography
 
-Two families, no more:
+Four faces, self-hosted via Fontsource (OFL, $0). Set in `src/styles` tokens, never inline.
 
-- **Geist Variable** (self-hosted at `public/fonts/`, OFL license file kept alongside) —
-  everything: headlines, body, nav, buttons. Weights: 400 body, 500 nav/labels, 600–700 display.
-- **System monospace** (`ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace`) —
-  micro-labels, dates, and the footer colophon only.
+| Face | Role | Notes |
+|---|---|---|
+| **Fraunces** | Masthead, display headings | Soft wonky serif with ink traps. Use high optical-size axis for the masthead; letter-spacing tight (-1%). |
+| **Literata** | Body text, long-form | The reading voice. 1.125rem/1.7 on a 65ch measure. |
+| **IBM Plex Mono** | Micro-labels: dates, entry numbers, tags, captions, TOC page numbers | Uppercase, tracked (+8%), 0.8125rem. Carried over from v1. |
+| **Caveat** | Marginalia and doodle captions **only** | Never headings, never UI, never body. If a page has more Caveat than two notes, it has too much. |
 
-Scale (fluid via `clamp()`):
+Scale: masthead `clamp(2.8rem, 8vw, 5.5rem)`; h2 `1.75rem` Fraunces; h3 `1.25rem` Fraunces;
+body `1.125rem` Literata; mono labels `0.8125rem`. Line length: max `65ch`.
 
-| Role | Size | Weight | Line height |
-|---|---|---|---|
-| Hero headline | `clamp(2.75rem, 7vw, 5.5rem)` | 600 | 1.05, letter-spacing `-0.02em` |
-| H2 section | `clamp(1.5rem, 3vw, 2.25rem)` | 600 | 1.15, `-0.01em` |
-| H3 / card title | `1.125rem` | 500 | 1.3 |
-| Body | `1rem` | 400 | 1.6 |
-| Small / meta | `0.875rem` | 400 | 1.5 |
-| Micro-label | `0.75rem` mono | 500 | 1.2, `text-transform: uppercase`, `letter-spacing: 0.08em` |
+## 4. Spacing & layout — the book page
 
-Body text measures at most `65ch`. Sentence case everywhere except micro-labels (uppercase).
-
-## 4. Spacing & layout
-
-- 4px base grid; spacing values are multiples of 4 (`8, 12, 16, 24, 32, 48, 64, 96…`).
-- Container: `max-width: 72rem`, `padding-inline: clamp(1.25rem, 4vw, 2.5rem)`.
-- Text-measure wrapper inside container: `max-width: 65ch`.
-- Sections separated by `1px` hairlines and `clamp(3rem, 8vw, 6rem)` vertical padding — not
-  by background blocks.
-- Full-page vertical rhythm: header → content → footer, content area breathes (`min-height`
-  so short pages still pin the footer down).
+- **One centered column**, `65ch` measure, generous top rhythm. Content breathes; nothing
+  floats over text.
+- **Margins wake up at ≥1100px:** marginalia (Caveat notes, small doodles) sit in the
+  outside margin beside the paragraph they annotate, connected by a dotted leader. On
+  smaller screens marginalia drops inline below its paragraph. Marginalia is optional
+  decoration — entries must read perfectly without it.
+- **Paper grain:** one committed SVG noise texture, opacity ≤4%, site-wide. It should be
+  felt, not seen.
+- **Masthead:** tall on the home page (Fraunces masthead + intro + TOC); slim everywhere
+  else (wordmark + one-line TOC).
+- Spacing tokens: `--space-1..8` (4 → 128px), consistent vertical rhythm of `--space-5`
+  between blocks.
 
 ## 5. Components
 
-- **Header** — sticky, `--color-bg` background, hairline bottom border. Site name left
-  (500, no underline), nav right: `0.75rem` mono uppercase links, `2rem` gap. Active page:
-  underline. Hover: color → `--color-text-muted`.
-- **Hero (home only)** — headline (scale top row) followed by tagline paragraph at `1.25rem`,
-  muted; hairline bottom border closes the hero.
-- **Offer cards (home)** — 3-column grid (1 column under `640px`), each cell: hairline border,
-  `0` radius, mono micro-label ("01 / FRONTEND"), H3 title, one-line description. Hover:
-  background → `--color-surface` (transition only).
-- **Buttons** — two variants, `0` radius, `0.75rem` mono uppercase, `12px × 24px` padding:
-  - Primary: `--color-text` background, `--color-bg` text. Hover: `--color-text-muted` background.
-  - Secondary: transparent background, hairline border, `--color-text` text. Hover: surface fill.
-- **Links (inline)** — `--color-text`, underlined with `text-underline-offset: 3px`.
-  Hover: color → `--color-text-muted`. Focus always shows the focus ring (see §7).
-- **Build-log list** — hairline-separated rows: title (500) left, date right in mono muted.
-  Hover: row background → `--color-surface`. No cards, no thumbnails.
-- **Footer** — hairline top border; mono micro-labels for link groups ("ELSEWHERE"),
-  inline links, muted colophon line: name · built with AI agents · Malaysia (UTC+8).
-- **Icons** — none by default. If ever needed: single-color SVG, `currentColor`, `1.5px` stroke.
-  No emoji in UI chrome.
+- **TOC navigation** — the site nav as a table of contents: IBM Plex Mono page titles,
+  dotted leaders, roman-numeral page numbers (`. . . . . . II`). On the entry index, same
+  treatment lists entries: `No. 012 . . . . title . . . . date`.
+- **Entry header** — mono row: `No. 047 · 2026-10-01 · [growth stamp]`, then Fraunces title.
+- **Growth stamps** — seedling / budding / evergreen as small hand-drawn SVG stamps (from
+  the kit or Rough.js), pink or blue linework, mono label. Never emoji.
+- **Links** — Ink text with a Fluoro-pink rough underline (Rough.js SVG) that fades in on
+  hover (opacity only). Visited links stay ink; the underline does the talking.
+- **Tags** — mono stamps with a small doodle circle, alternating pink/blue.
+- **Images & illustrations** — ink-line border (`1.5px` Ink, radius `0`); featured images
+  may use a Rough.js sketchy border. Explicit `width`/`height`, `loading="lazy"` below the
+  fold, mono micro-caption directly below (e.g. `VOL. I — 2026-10-01`).
+- **Marginalia** — Caveat note + optional small doodle in the margin, dotted leader to the
+  text. Two notes per page, max.
+- **Colophon footer** — every page: ink hairline, then mono line `VOL. I · SET IN FRAUNCES,
+  LITERATA & PLEX MONO · COLOPHON`. The colophon page itself holds materials, licenses,
+  provenance, and the honest changelog.
+- **Buttons** — ink-line pill, paper fill, pink underline-hover; never filled accent blocks.
 
 ## 6. Motion
 
-- One token: `--transition: 150ms ease`, applied to `color`, `background-color`,
-  `border-color`, `opacity` only. No transforms, no scroll-triggered or entrance animation.
-- Motion is only ever a state change the user caused (hover/focus). Nothing loops, bounces,
-  or animates on load.
-- `prefers-reduced-motion: reduce` → all transitions `none`.
-- This section refines `docs/spec.md` §13: interaction feedback only, nothing decorative.
+Near-zero, per ADR 002. CSS transitions on hover/focus only, ≤200ms, limited to color,
+opacity, and underline. Nothing moves by itself: no scroll effects, no autoplay, no
+animation libraries, no parallax, no entrance animations. `prefers-reduced-motion` is
+honored (and is nearly free given the above).
 
 ## 7. Accessibility (non-negotiable)
 
-- Focus ring: `2px solid var(--color-text)` with `2px` offset, on `:focus-visible`, everywhere.
-- Touch/click targets ≥ 44×44px on mobile (pad, don't stretch text).
-- Semantic landmarks (`header`, `nav`, `main`, `footer`), one `h1` per page, headings never
-  skipped.
-- Skip-to-content link, visible on focus.
-- Meaningful `alt` text or none (`alt=""`) for decorative images. No text baked into images.
-- Every page: unique `<title>` + meta description (layout enforces this).
+Carried from v1, intact: WCAG AA contrast for all text (see §2 usage rules for accent
+limits); visible focus states (Riso blue outline, never removed); full keyboard navigation;
+alt text on every illustration (describing content, not decoration-status — decorative
+doodles get `alt=""`); semantic headings; title and description on every page. Lighthouse
+90+ target.
 
 ## 8. Page layouts
 
-- **Home** — hero (headline + tagline) → "WHAT I DO" offer cards → "THE PROOF" imagery section (§9) → "LATEST" single newest
-  log entry + link to `/log/` → contact CTA (primary button).
-- **Work** — mono label + H1, intro sentence, then the honest case-study list (kept simple
-  until real case studies exist in week 4).
-- **How I work** — text page: H1, intro, hairline-ruled subsections, generous measure.
-- **Build log** — list component from §5, newest first. Post pages: H1, mono date line,
-  article at `65ch` measure.
-- **About** — text page, same treatment as How I work.
-- **Contact** — link list styled as rows (label in mono muted left, value right), primary
-  email button, timezone note.
+Vol. I defines four patterns; v1's remaining pages (Work, About, Contact, Build log) are
+pending implementation-phase decisions under #21 and will adopt these patterns when their
+fate is settled.
 
-## 9. Imagery
+- **Home** — tall masthead (Fraunces wordmark + one-line diary intro + a small peep or
+  doodle), then the TOC: latest entries with numbers and dates, dotted leaders.
+- **Journal index** — the full TOC of entries: `No. . . . title . . . date . . . stage`.
+- **Entry** — entry header (number, date, stage stamp), Literata body on the book page,
+  marginalia as available, ink-line figures with captions.
+- **Colophon** — the "about this site" book page: built with, set in, drawn from (kit
+  sources + licenses), honest changelog, link to `PROVENANCE.md`.
 
-The site is honest, so its images are too. Morflax-style visuals with none of the fiction.
+## 9. Imagery & provenance
 
-- **Real sources only:** screenshots of this site, its public repo (issues/PR graph), build
-  output, or Windy's own photos. No stock photos, no AI-generated scenes, no images implying
-  clients, teams, or work that doesn't exist. If an image can't be traced to something real,
-  it doesn't ship.
-- **Programmatic art:** brand graphics may be rendered from committed scripts (`scripts/`),
-  e.g. a Three.js scene exported to a static image. The script is the provenance — anyone can
-  re-run it and get the same output. Rules: monochrome output, decorative only (never implies
-  client work or product features), and the rendered image is reviewed by Windy before it
-  ships.
-- **Monochrome enforced:** every image gets `filter: grayscale(100%)` in CSS — originals stay
-  untouched on disk, the page renders grayscale, per §2.
-- **Presentation:** hairline border, `0` radius, explicit `width`/`height` (no layout shift),
-  `loading="lazy"` below the fold, and a mono micro-caption directly below
-  (e.g. `LIVE SITE — 2026-09-29`).
-- **Files:** `public/images/`, named by subject and date (`home-site-2026-09-29.png`).
-- **Portrait slot:** the About page reserves a place for a real photo of Windy. Until one
-  exists, no placeholder person, no avatar silhouette.
+- **The kit (CC0):** [Open Peeps](https://openpeeps.com), [Open Doodles](https://opendoodles.com),
+  [Humaaans](https://humaaans.com) — hand-drawn characters, scenes, and objects,
+  recolored into the ink set and committed to the repo.
+- **Rough.js accents (MIT):** sketchy borders, arrows, circles, dividers, hatching —
+  generated at build time by committed scripts; the script is the provenance.
+- **Real sources:** screenshots of this site/repo and Windy's own photos remain welcome,
+  captioned in mono.
+- **Banned:** AI-generated imagery, stock photos, anything implying clients, teams, or work
+  that doesn't exist.
+- **Rules:** SVG preferred; recolor kit art into §2 inks only; every committed asset is
+  listed in `PROVENANCE.md` (source, author, license, date); files live in
+  `public/images/`, named by subject and date (`entry-047-peep-2026-10-01.svg`).
 
 ## 10. Do / Don't
 
-**Do** use the tokens; keep corners square; underline links; label sections in mono
-uppercase; let headlines be huge; keep copy first-person and plain.
+**Do:** reach for the kit before reaching for anything new; keep accents small; number
+everything; put the wit in captions and margins; let long entries be long; bump the Volume
+when it sparks joy, never on a schedule.
 
-**Don't** introduce any color outside §2; add shadows, gradients, or rounded corners; center
-long body text; use font weights beyond 400/500/600/700; add emoji to navigation or buttons;
-animate anything the cursor didn't cause; use exclamation marks.
-
----
-
-*Changes to this file go through a `docs:` PR, like everything else in docs. The redesign
-implementing it is tracked in #14.*
+**Don't:** don't add a motion library "just for one page"; don't fill backgrounds with
+accent ink; don't use Caveat for anything but marginalia; don't introduce a fifth ink; don't
+import unmodified kit art without recoloring and provenance; don't resize the measure past
+65ch; don't improvise a component that isn't here — extend this file first.

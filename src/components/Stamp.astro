@@ -1,0 +1,93 @@
+---
+/**
+ * Growth stamp — DESIGN.md §5: hand-drawn-style SVG stamps for entry life stages.
+ * Pink and blue linework alternate; the label is always mono.
+ */
+interface Props {
+  stage: 'seedling' | 'budding' | 'evergreen';
+  tone?: 'pink' | 'blue';
+}
+
+const { stage, tone = 'pink' } = Astro.props;
+const stroke = tone === 'pink' ? 'var(--pink)' : 'var(--blue)';
+const label = stage.charAt(0).toUpperCase() + stage.slice(1);
+---
+
+<span class="stamp">
+  {
+    stage === 'seedling' && (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M12 21 C 11.6 16 11.8 12 12.2 9.5"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+        <path
+          d="M12 9.5 C 9.8 9.2 7.6 7.8 7.4 5.2 C 10.4 5 12.2 6.8 12.3 9.3"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+        <path
+          d="M12.4 9.8 C 12.8 7.4 14.6 5.8 17.4 6 C 17.2 8.8 15.2 10.2 12.5 10"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </svg>
+    )
+  }
+  {
+    stage === 'budding' && (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M12 21 C 11.7 17 11.8 13.5 12.1 10.5"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+        <path
+          d="M12.1 10.5 C 10 10.6 8.2 9.4 8 7 C 10.5 6.8 12.1 8 12.3 10.2"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+        <path
+          d="M12.2 9.2 C 11.8 6.6 12.6 4.2 15.2 3.2 C 16.4 5.6 15.4 8.2 12.8 9.4 Z"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    )
+  }
+  {
+    stage === 'evergreen' && (
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M12 22 L 12 17.5"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+        <path
+          d="M12 2.5 L 5.5 11 L 9 10.6 L 4.8 16.5 L 19.2 16.5 L 15 10.6 L 18.5 11 Z"
+          stroke={stroke}
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    )
+  }
+  <span class="mono">{label}</span>
+</span>
+
+<style>
+  .stamp {
+    color: var(--ink-70);
+    font-size: var(--size-label);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>

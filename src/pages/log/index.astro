@@ -25,8 +25,19 @@ const entryNo = (n: number) => `No. ${String(n).padStart(3, '0')}`;
 >
   <section class="section">
     <div class="container measure-wide">
-      <p class="label">Vol. I · the journal</p>
-      <h1>Everything so far</h1>
+      <div class="journal-header">
+        <div>
+          <p class="label">Vol. I · the journal</p>
+          <h1>Everything so far</h1>
+        </div>
+        <img
+          src="/images/masthead-book-sprout.svg"
+          alt=""
+          width="88"
+          height="66"
+          class="sprout"
+        />
+      </div>
       <ul class="toc">
         {
           numbered.map(({ entry, number }) => (
@@ -53,6 +64,18 @@ const entryNo = (n: number) => `No. ${String(n).padStart(3, '0')}`;
 <style>
   .measure-wide {
     max-width: 72ch;
+  }
+
+  .journal-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .sprout {
+    flex-shrink: 0;
+    margin-bottom: var(--space-1);
   }
 
   .num,

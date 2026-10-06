@@ -19,7 +19,7 @@ Generated texture: the paper grain is an inline SVG `feTurbulence` filter define
 
 | File | What | Author | License | Date |
 |---|---|---|---|---|
-| `public/images/masthead-book-sprout.svg` | Open book with sprout, home masthead | Drawn for this repo (agent-drawn, Windy-reviewed) | © windyyye | 2026-10-02 |
+| `public/images/masthead-book-sprout.svg` | Open book with sprout — journal index header | Drawn for this repo (agent-drawn, Windy-reviewed) | © windyyye | 2026-10-02 |
 | `public/images/pivot-signpost.svg` | Two-way signpost, entry No. 001 | Drawn for this repo (agent-drawn, Windy-reviewed) | © windyyye | 2026-10-02 |
 | Growth stamps (inline `Stamp.astro` SVGs) | Seedling / budding / evergreen | Drawn for this repo (agent-drawn, Windy-reviewed) | © windyyye | 2026-10-01 |
 

@@ -1,24 +1,47 @@
 ---
 /**
- * About — DESIGN.md §8: text page. Real copy lands in week 2.
+ * About — spec #28: the diary's About. Who keeps this sketchbook,
+ * what Vol. I is, why it's public. The freelance history shrinks to
+ * one honest line. Links No. 001 and the colophon.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
   title="About"
-  description="Who I am: an early-career freelancer directing AI coding agents, and why I work this way."
+  description="Who keeps this career diary, what Vol. I is, and why it's public."
 >
   <article class="section">
     <div class="container measure">
-      <p class="label">About</p>
-      <h1>About</h1>
-      <p>Real copy is on its way. In one paragraph for now:</p>
+      <p class="label">Vol. I · about</p>
+      <h1>The person keeping this book</h1>
+
       <p>
-        I'm Windy, an early-career freelancer based in Malaysia. I'm open to long-term and
-        contract work, and I build with AI coding agents under my direction — I spec, direct,
-        review, and test. I'd rather show you the process than tell you about it, which is why
-        this repo is public.
+        I'm Windy, writing from Malaysia (UTC+8). I'm early in my career **[CHECK: keep
+        "early-career"? Anything to add — university, internship, or is that history for a
+        later entry?]**, and I build things with AI coding agents under my direction: I spec
+        the work, direct the agents, and check every result. This site is built exactly that
+        way — the colophon explains the loop.
+      </p>
+
+      <p>
+        This book is a sketchbook that narrows into my career — what I'm building, reading,
+        and deciding, kept for fun **[CHECK: add a personal interest or two? Frontend, QA,
+        web design exploration are in the repo; is there something more *you* that belongs
+        here?]**.
+      </p>
+
+      <p>
+        It's public on purpose. Keeping it in public trains me: it makes me prepare properly,
+        work in modules, and hold myself to professional habits — a rehearsal for real-world
+        projects, with the honesty bar of one.
+      </p>
+
+      <p>
+        Before this, the site was a freelance portfolio that never launched; the objective
+        flipped first. That story is <a href="/log/2026-10-02-the-pivot/">entry No. 001</a>,
+        and the materials of the book are listed in the{" "}
+        <a href="/colophon/">colophon</a>.
       </p>
     </div>
   </article>

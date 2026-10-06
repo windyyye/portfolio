@@ -24,6 +24,14 @@ const entryNo = (n: number) => `No. ${String(n).padStart(3, '0')}`;
 ---
 
 <BaseLayout title="Home" tall>
+  <img
+    slot="masthead-art"
+    src="/images/masthead-book-sprout.svg"
+    alt=""
+    width="110"
+    height="90"
+    class="masthead-art"
+  />
   <section class="section">
     <div class="container">
       <p class="intro measure">{site.tagline}</p>

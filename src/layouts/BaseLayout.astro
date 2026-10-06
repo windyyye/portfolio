@@ -51,6 +51,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
       <div class="container masthead">
         <a class="wordmark" href="/">{site.name}</a>
         <p class="issue label">Vol. I · a career diary</p>
+        {tall && <slot name="masthead-art" />}
       </div>
 
       <div class="container">
@@ -142,6 +143,11 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 
   .issue {
     margin: 0;
+  }
+
+  :global(.masthead-art) {
+    align-self: flex-end;
+    margin-left: auto;
   }
 
   nav {

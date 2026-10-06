@@ -302,6 +302,36 @@ a:hover {
   max-width: 65ch;
 }
 
+/* Marginalia — spec #26: Caveat notes written with :margin[…] in the flow.
+   Inline below their paragraph by default; the margin wakes at ≥1100px. */
+.margin-note {
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: var(--ink-70);
+  margin: var(--space-1) 0 var(--space-3);
+  transform: rotate(-1.2deg);
+}
+
+.margin-note-leader {
+  display: none;
+}
+
+@media (min-width: 1100px) {
+  .prose .margin-note {
+    float: right;
+    clear: right;
+    width: 150px;
+    margin: -0.3em -190px var(--space-3) 0;
+    border-left: 2px dotted var(--ink-30);
+    padding-left: var(--space-2);
+  }
+
+  .prose .margin-note-leader {
+    display: inline-block;
+  }
+}
+
 .prose h2,
 .prose h3 {
   margin-top: var(--space-5);

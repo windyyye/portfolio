@@ -1,0 +1,72 @@
+---
+/**
+ * Tag pages — spec #28: entries browsable by tag (makes · site · learning).
+ * One static page per tag in use.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('log')).sort(
+    (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
+  );
+  const numbered = entries.map((entry, index) => ({ entry, number: index + 1 }));
+  const tags = [...new Set(numbered.flatMap(({ entry }) => entry.data.tags ?? []))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { tagged: numbered.filter(({ entry }) => (entry.data.tags ?? []).includes(tag)) },
+  }));
+}
+
+const { tag } = Astro.params;
+const { tagged } = Astro.props;
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+<BaseLayout
+  title={`Tagged: ${tag}`}
+  description={`Journal entries tagged “${tag}”.`}
+>
+  <section class="section">
+    <div class="container measure-wide">
+      <p class="label">Vol. I · tagged</p>
+      <h1>#{tag}</h1>
+      <ul class="toc">
+        {
+          tagged.map(({ entry, number }) => (
+            <li>
+              <a class="toc-row" href={`/log/${entry.id}/`}>
+                <span class="mono num">{`No. ${String(number).padStart(3, '0')}`}</span>
+                <span class="toc-title">{entry.data.title}</span>
+                <span class="leader" aria-hidden="true" />
+                <span class="numeral">{formatDate(entry.data.date)}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="back-link mono"><a href="/log/">← The journal</a></p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .measure-wide {
+    max-width: 72ch;
+  }
+
+  .num,
+  .numeral {
+    color: var(--ink-70);
+    white-space: nowrap;
+  }
+
+  .back-link {
+    margin-top: var(--space-5);
+    font-size: var(--size-label);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+</style>

@@ -25,14 +25,11 @@ export const site = {
 } as const;
 
 export const links = {
-  /** TODO(Windy): real contact email. */
-  email: 'mailto:you@example.com',
+  email: 'mailto:windye0407@gmail.com',
 
   github: 'https://github.com/windyyye',
 
-  /** TODO(Windy): real LinkedIn URL. */
-  linkedin: 'https://www.linkedin.com/in/placeholder/',
+  linkedin: 'https://www.linkedin.com/in/windy-e-8088712b4/',
 
-  /** TODO(Windy): add Upwork once the profile is live. */
-  // upwork: 'https://www.upwork.com/...',
+  /** Upwork was retired with the v1 objective — see docs/spec.md. */
 } as const;

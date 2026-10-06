@@ -46,6 +46,15 @@ const entryNo = `No. ${String(number).padStart(3, '0')}`;
           )
         }
       </p>
+      {
+        (post.data.tags ?? []).length > 0 && (
+          <p class="tag-row mono">
+            {post.data.tags!.map((tag) => (
+              <a class="tag" href={`/log/tags/${tag}/`}>#{tag}</a>
+            ))}
+          </p>
+        )
+      }
       <h1>{post.data.title}</h1>
       <div class="prose">
         <Content />
@@ -61,5 +70,20 @@ const entryNo = `No. ${String(number).padStart(3, '0')}`;
     font-size: var(--size-label);
     text-transform: uppercase;
     letter-spacing: 0.08em;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: calc(-1 * var(--space-2)) 0 var(--space-3);
+  }
+
+  .tag-row :global(.tag) {
+    font-size: var(--size-label);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-70);
+    text-decoration: none;
   }
 </style>

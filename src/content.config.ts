@@ -7,9 +7,10 @@ const log = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    summary: z.string().optional(),
-    /** Growth stage per spec v2 — seedling → budding → evergreen. Optional; entries are fine without one. */
+    summary: z.string().optional(),    /** Growth stage per spec v2 — seedling → budding → evergreen. Optional; entries are fine without one. */
     stage: z.enum(['seedling', 'budding', 'evergreen']).optional(),
+    /** Tag vocabulary (keep it small): makes · site · learning. */
+    tags: z.array(z.string()).optional(),
   }),
 });
 

@@ -15,6 +15,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { links, site } from '../config';
 import { createFundTheInkState } from '../scripts/fund-the-ink-state.mjs';
+  import confetti from 'canvas-confetti';
 
 const channels = [
   { label: 'Email', href: links.email, display: 'windye0407@gmail.com' },
@@ -95,6 +96,7 @@ const channels = [
   // coffee easter egg. The state machine is the real one, untouched —
   // the adapter only chooses HOW a pop looks.
   import { createFundTheInkState } from '../scripts/fund-the-ink-state.mjs';
+  import confetti from 'canvas-confetti';
 
   const params = new URLSearchParams(location.search);
   const variant = params.get('variant') ?? 'current';
@@ -127,34 +129,23 @@ const channels = [
     }
   }
 
-  // ── confetti: the svelte-confetti look, ported to vanilla CSS ──
-  // (mitcheljager/svelte-confetti is a Svelte component; adopting it
-  // would add the Svelte compiler to an Astro site for one burst.
-  // Its technique is CSS custom props + keyframes, so we port that.)
-  function randBetween(min, max) { return Math.random() * (max - min) + min; }
+  // ── confetti via canvas-confetti (MIT, ~6KB bundled) ──
+  // The single sanctioned exception to the motion law (DESIGN.md §6).
+  const EGG_COLORS = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
 
-  function spawnConfetti({ originX, originY, amount = 50, duration = 2000, fallDistance = 300, rounded = true }) {
-    if (reducedMotion.matches) return;
-    const colors = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
-    for (let i = 0; i < amount; i++) {
-      const piece = document.createElement('span');
-      piece.className = 'confetti-svelte';
-      piece.style.setProperty('--color', colors[i % colors.length]);
-      piece.style.setProperty('--skew', `${randBetween(-45, 45)}deg, ${randBetween(-45, 45)}deg`);
-      piece.style.setProperty('--rot-xyz', `${randBetween(-10, 10)}, ${randBetween(-10, 10)}, ${randBetween(-10, 10)}`);
-      piece.style.setProperty('--rot-deg', `${randBetween(0, 360)}deg`);
-      piece.style.setProperty('--ty', randBetween(0.25, 1));
-      piece.style.setProperty('--tx', randBetween(-0.6, 0.6));
-      piece.style.setProperty('--scale', 0.1 * randBetween(2, 10));
-      piece.style.setProperty('--delay', `${randBetween(0, 50)}ms`);
-      piece.style.setProperty('--dur', `${duration}ms`);
-      piece.style.setProperty('--fall', `${fallDistance}px`);
-      piece.style.setProperty('--rounded', rounded ? '50%' : '2px');
-      piece.style.left = `${originX}px`;
-      piece.style.top = `${originY}px`;
-      document.body.appendChild(piece);
-      setTimeout(() => piece.remove(), duration + 400);
-    }
+  function burstConfetti({ intensity = 1, origin = null } = {}) {
+    const o = origin ?? coffeeCenter();
+    confetti({
+      particleCount: Math.round(60 * intensity),
+      spread: 100,
+      startVelocity: 38 + 12 * intensity,
+      scalar: 0.9 + 0.3 * intensity,
+      shapes: ['circle', 'square'],
+      ticks: 220,
+      colors: EGG_COLORS,
+      origin: { x: o.x / innerWidth, y: o.y / innerHeight },
+      disableForReducedMotion: true,
+    });
   }
 
   function coffeeCenter() {
@@ -170,7 +161,7 @@ const channels = [
         clearVessels();
         document.getElementById('coffee-message').textContent = text;
       },
-      burst() { spawnConfetti({ originX: coffeeCenter().x, originY: coffeeCenter().y, amount: 30, fallDistance: 200 }); },
+      burst() { burstConfetti({ intensity: 0.7 }); },
     },
     spotlight: {
       onPop(text) {
@@ -183,7 +174,7 @@ const channels = [
         setTimeout(() => overlay.classList.remove('on'), 1400);
         setTimeout(() => overlay.setAttribute('hidden', ''), 1800);
       },
-      burst() { spawnConfetti({ originX: innerWidth / 2, originY: innerHeight * 0.35, amount: 60, fallDistance: innerHeight * 0.5 }); },
+      burst() { burstConfetti({ intensity: 1.2, origin: { x: innerWidth / 2, y: innerHeight * 0.35 } }); },
     },
     bubble: {
       onPop(text, { nudge }) {
@@ -191,10 +182,10 @@ const channels = [
         const bubble = document.getElementById('egg-bubble');
         bubble.textContent = nudge ? `${text} …the jar's right there ↓` : text;
         bubble.hidden = false;
-        spawnConfetti({ originX: coffeeCenter().x, originY: coffeeCenter().y, amount: 50 });
+        burstConfetti({ intensity: 1.15 });
         setTimeout(() => bubble.setAttribute('hidden', ''), 2300);
       },
-      burst() { spawnConfetti({ originX: coffeeCenter().x, originY: coffeeCenter().y, amount: 50 }); },
+      burst() { burstConfetti({ intensity: 1.15 }); },
     },
     rain: {
       onPop(text) {
@@ -204,7 +195,7 @@ const channels = [
         banner.hidden = false;
         banner.classList.add('on');
         for (let i = 0; i < 3; i++) {
-          spawnConfetti({ originX: innerWidth * (0.2 + 0.3 * i), originY: -20, amount: 20, fallDistance: innerHeight });
+          setTimeout(() => burstConfetti({ intensity: 1, origin: { x: innerWidth * (0.2 + 0.3 * i), y: -0.05 } }), i * 180);
         }
         setTimeout(() => banner.classList.remove('on'), 1500);
         setTimeout(() => banner.setAttribute('hidden', ''), 1900);

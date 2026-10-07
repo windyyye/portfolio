@@ -1,7 +1,7 @@
 ---
 /**
- * Contact — DESIGN.md v2: a quiet say-hi. Email, GitHub, LinkedIn,
- * timezone. No funnel, no Upwork (retired with the v1 objective).
+ * Contact — DESIGN.md v2: a letter to the reader. Two parts: say hi,
+ * fund the ink. The humor lives in the small text, where it belongs.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { links, site } from '../config';
@@ -15,7 +15,7 @@ const channels = [
 
 <BaseLayout
   title="Contact"
-  description={`How to say hi to ${site.name}: email, GitHub, and LinkedIn. Malaysia (UTC+8).`}
+  description={`Say hi to ${site.name} — or fund the ink. Email, GitHub, LinkedIn, and a tip jar. Malaysia (UTC+8).`}
 >
   <section class="section">
     <div class="container measure">
@@ -35,6 +35,32 @@ const channels = [
           ))
         }
       </ul>
+
+      <div class="fund">
+        <img
+          src="/images/kit/coffee-2026-10-07.svg"
+          alt=""
+          width="150"
+          height="120"
+          class="coffee"
+        />
+        <h2>Fund the ink</h2>
+        <p>
+          The diary is free. The coffee that fuels it is not. So for readers who just want to
+          <em>give me money without me servicing them</em> — this one's for you, WAHAHA.
+        </p>
+        <p class="text-muted">
+          Hosting is already free; tips go straight to the coffee supply and the author's
+          ego.
+        </p>
+        {
+          links.kofi && (
+            <p>
+              <a class="btn" href={links.kofi}>Buy the author a cup →</a>
+            </p>
+          )
+        }
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -61,5 +87,16 @@ const channels = [
 
   .channel:last-child {
     border-bottom: 1.5px solid var(--ink-20);
+  }
+
+  .fund {
+    margin-top: var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 2px dotted var(--ink-30);
+  }
+
+  .coffee {
+    display: block;
+    margin-bottom: var(--space-3);
   }
 </style>

@@ -109,9 +109,10 @@ animation libraries, no parallax, no entrance animations. `prefers-reduced-motio
 honored (and is nearly free given the above).
 
 **Single sanctioned exception — the tip-jar easter egg** (contact page): a click-triggered
-confetti burst + escalating message, scoped to one button. Hand-rolled CSS particles, no
-animation libraries, suppressed under `prefers-reduced-motion` (the message still shows).
-Any further motion anywhere requires amending this section first.
+confetti burst + escalating phrase in a speech bubble, scoped to one button. Confetti via
+the `canvas-confetti` library (MIT, ~6KB, bundled — the one approved dependency), phrases
+via an aria-live status; suppressed under `prefers-reduced-motion` (the phrase still
+shows). Any further motion anywhere requires amending this section first.
 
 ## 7. Accessibility (non-negotiable)
 

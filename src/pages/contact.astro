@@ -2,10 +2,15 @@
 /**
  * Contact — DESIGN.md v2: a letter to the reader. Two parts: say hi,
  * fund the ink. The humor lives in the small text, where it belongs.
+ *
+ * The coffee is clickable — the tip-jar easter egg (the site's single
+ * sanctioned motion exception, DESIGN.md §6): confetti via the
+ * canvas-confetti library, phrases via the fund-the-ink state machine.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { links, site } from '../config';
 import { createFundTheInkState } from '../scripts/fund-the-ink-state.mjs';
+import confetti from 'canvas-confetti';
 
 const channels = [
   { label: 'Email', href: links.email, display: 'windye0407@gmail.com' },
@@ -53,6 +58,7 @@ const channels = [
         </button>
         <p class="coffee-hint" aria-hidden="true">psst. click the coffee.</p>
         <p id="coffee-message" class="coffee-message" role="status"></p>
+        <div id="egg-bubble" class="egg-bubble" hidden></div>
         <h2>Fund the ink</h2>
         <p>
           The diary is free. The coffee that fuels it is not. So for readers who just want to
@@ -62,13 +68,9 @@ const channels = [
           Hosting is already free; tips go straight to the coffee supply and the author's
           ego.
         </p>
-        {
-          links.kofi && (
-            <p>
-              <a class="btn" href={links.kofi}>Buy the author a cup →</a>
-            </p>
-          )
-        }
+        <p>
+          <a class="btn" href={links.kofi}>Buy the author a cup →</a>
+        </p>
       </div>
     </div>
   </section>
@@ -76,40 +78,45 @@ const channels = [
 
 <script>
   // The tip-jar easter egg — DOM adapter for the state machine.
+  // Confetti: canvas-confetti (MIT, bundled) — the sanctioned exception.
   import { createFundTheInkState } from '../scripts/fund-the-ink-state.mjs';
+  import confetti from 'canvas-confetti';
 
-  const coffee = document.getElementById('coffee-button');
-  const message = document.getElementById('coffee-message');
+  const EGG_COLORS = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
-  if (coffee && message) {
-    const state = createFundTheInkState();
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    const colors = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
-
-    coffee.addEventListener('click', () => {
-      const { message: text, pop } = state.recordClick();
-      if (!text) return;
-
-      message.textContent = text;
-
-      if (pop && !reducedMotion.matches) {
-        const rect = coffee.getBoundingClientRect();
-        for (let i = 0; i < 24; i++) {
-          const piece = document.createElement('span');
-          piece.className = 'confetti-piece';
-          piece.style.left = `${rect.left + rect.width / 2 + (Math.random() * 80 - 40)}px`;
-          piece.style.top = `${rect.top + rect.height / 2}px`;
-          piece.style.background = colors[i % colors.length];
-          piece.style.setProperty('--dx', `${Math.random() * 260 - 130}px`);
-          piece.style.setProperty('--rot', `${Math.random() * 540 - 270}deg`);
-          piece.style.animationDelay = `${Math.random() * 120}ms`;
-          document.body.appendChild(piece);
-          piece.addEventListener('animationend', () => piece.remove());
-          setTimeout(() => piece.remove(), 1800);
-        }
-      }
+  function burst({ intensity = 1, origin } = {}) {
+    confetti({
+      particleCount: Math.round(60 * intensity),
+      spread: 100,
+      startVelocity: 38 + 12 * intensity,
+      scalar: 0.9 + 0.3 * intensity,
+      shapes: ['circle', 'square'],
+      ticks: 220,
+      colors: EGG_COLORS,
+      origin: { x: origin.x / innerWidth, y: origin.y / innerHeight },
+      disableForReducedMotion: true,
     });
   }
+
+  function coffeeCenter() {
+    const rect = document.getElementById('coffee-button')?.getBoundingClientRect();
+    return rect
+      ? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+      : { x: innerWidth / 2, y: innerHeight / 3 };
+  }
+
+  // ── the real state machine picks the words ──
+  const state = createFundTheInkState();
+  const coffee = document.getElementById('coffee-button');
+  const bubble = document.getElementById('egg-bubble');
+
+  coffee.addEventListener('click', () => {
+    const result = state.recordClick();
+    bubble.textContent = result.message ?? '';
+    bubble.hidden = !result.message;
+    burst({ intensity: result.message ? 1.15 : 0.7, origin: coffeeCenter() });
+  });
 </script>
 
 <style>
@@ -136,17 +143,6 @@ const channels = [
     border-bottom: 1.5px solid var(--ink-20);
   }
 
-  .fund {
-    margin-top: var(--space-6);
-    padding-top: var(--space-4);
-    border-top: 2px dotted var(--ink-30);
-  }
-
-  .coffee {
-    display: block;
-    margin-bottom: var(--space-3);
-  }
-
   .coffee-button {
     display: block;
     padding: 0;
@@ -163,12 +159,22 @@ const channels = [
     margin: 0 0 var(--space-3);
   }
 
-  .coffee-message {
+  .egg-bubble {
+    position: absolute;
+    left: 170px;
+    top: -10px;
+    z-index: 40;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    border-radius: 18px 18px 18px 4px;
     font-family: var(--font-hand);
-    font-size: 1.35rem;
-    line-height: 1.35;
-    color: var(--ink);
-    min-height: 1.4em;
-    margin: 0 0 var(--space-2);
+    font-size: 1.45rem;
+    line-height: 1.3;
+    padding: var(--space-2) var(--space-3);
+    max-width: 18ch;
+  }
+
+  .fund {
+    position: relative;
   }
 </style>

@@ -3,13 +3,13 @@
 A personal site for Windy: a sketchbook that narrows into her career. It is a work in
 progress, built in public for fun and self-expression — explicitly **not** for marketing or
 showcases. The pivot from freelance portfolio to diary is the site's origin story, told in
-[entry No. 001](https://omaopoao.com/log/2026-10-02-the-pivot/) and specified in
+[entry No. 001](https://windye.web.app/log/2026-10-02-the-pivot/) and specified in
 [`docs/spec.md`](docs/spec.md).
 
 ## What this site is for
 
 A digital diary: what Windy is building, reading, and deciding, kept in public on purpose.
-The intended domain is [omaopoao.com](https://omaopoao.com), served from Firebase Hosting's
+Live at [windye.web.app](https://windye.web.app), served from Firebase Hosting's
 `windye` project. Claims reflect work that can be shown and explained — no invented clients,
 metrics, or experience, and no AI-generated imagery.
 
@@ -63,5 +63,5 @@ process can be inspected as well as the finished site.
 
 ## Status
 
-Vol. I — launch-ready work in progress. The revamp foundation (research, spec v2, ADRs), the
-design system, the book skeleton, and entry No. 001 are merged; the shells are being filled.
+**Vol. I is live at [windye.web.app](https://windye.web.app)** — launched 7 October 2026.
+Launch-eve entry: [Hello, Vol. I](https://windye.web.app/log/2026-10-07-hello-vol-i/).

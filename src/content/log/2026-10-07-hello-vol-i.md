@@ -1,6 +1,6 @@
 ---
 title: Hello, Vol. I
-date: 2026-10-09
+date: 2026-10-07
 stage: budding
 tags:
   - site

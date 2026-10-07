@@ -56,9 +56,7 @@ const channels = [
             class="coffee"
           />
         </button>
-        <p class="coffee-hint" aria-hidden="true">psst. click the coffee.</p>
-        <p id="coffee-message" class="coffee-message" role="status"></p>
-        <div id="egg-bubble" class="egg-bubble" hidden></div>
+        <div id="egg-bubble" class="egg-bubble" role="status" hidden></div>
         <h2>Fund the ink</h2>
         <p>
           The diary is free. The coffee that fuels it is not. So for readers who just want to
@@ -110,11 +108,16 @@ const channels = [
   const state = createFundTheInkState();
   const coffee = document.getElementById('coffee-button');
   const bubble = document.getElementById('egg-bubble');
+  let bubbleTimer;
 
   coffee.addEventListener('click', () => {
     const result = state.recordClick();
-    bubble.textContent = result.message ?? '';
-    bubble.hidden = !result.message;
+    if (!result.message) return; // lockout: silence, the bubble stays as-is
+
+    bubble.textContent = result.message;
+    bubble.hidden = false;
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => { bubble.hidden = true; }, 4_000);
     burst({ intensity: result.message ? 1.15 : 0.7, origin: coffeeCenter() });
   });
 </script>
@@ -151,14 +154,6 @@ const channels = [
     cursor: pointer;
   }
 
-  .coffee-hint {
-    font-family: var(--font-hand);
-    font-size: 1.2rem;
-    color: var(--ink-70);
-    transform: rotate(-1.2deg);
-    margin: 0 0 var(--space-3);
-  }
-
   .egg-bubble {
     position: absolute;
     left: 170px;
@@ -176,5 +171,6 @@ const channels = [
 
   .fund {
     position: relative;
+    margin-top: var(--space-7);
   }
 </style>

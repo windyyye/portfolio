@@ -356,7 +356,31 @@ a:hover {
   margin-block: var(--space-5);
 }
 
-/* §6 Motion — reduced motion honored */
+/* §6 Motion — near-zero, by law.
+   Single sanctioned exception: the tip-jar easter egg (contact page) —
+   a contained confetti burst scoped to one button. Hand-rolled CSS,
+   no libraries. Everything else: nothing moves by itself. */
+.confetti-piece {
+  position: fixed;
+  z-index: 3;
+  width: 8px;
+  height: 12px;
+  border-radius: 1px;
+  pointer-events: none;
+  animation: confetti-fall 1s ease-in forwards;
+}
+
+@keyframes confetti-fall {
+  from {
+    transform: translate(0, -12px) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--dx, 0), 150px) rotate(var(--rot, 180deg));
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

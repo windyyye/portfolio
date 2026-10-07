@@ -5,6 +5,7 @@
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { links, site } from '../config';
+import { createFundTheInkState } from '../scripts/fund-the-ink-state.mjs';
 
 const channels = [
   { label: 'Email', href: links.email, display: 'windye0407@gmail.com' },
@@ -37,13 +38,21 @@ const channels = [
       </ul>
 
       <div class="fund">
-        <img
-          src="/images/kit/coffee-2026-10-07.svg"
-          alt=""
-          width="150"
-          height="120"
-          class="coffee"
-        />
+        <button
+          id="coffee-button"
+          class="coffee-button"
+          aria-label="Click the coffee. It has opinions."
+        >
+          <img
+            src="/images/kit/coffee-2026-10-07.svg"
+            alt=""
+            width="150"
+            height="120"
+            class="coffee"
+          />
+        </button>
+        <p class="coffee-hint" aria-hidden="true">psst. click the coffee.</p>
+        <p id="coffee-message" class="coffee-message" role="status"></p>
         <h2>Fund the ink</h2>
         <p>
           The diary is free. The coffee that fuels it is not. So for readers who just want to
@@ -64,6 +73,44 @@ const channels = [
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  // The tip-jar easter egg — DOM adapter for the state machine.
+  import { createFundTheInkState } from '../scripts/fund-the-ink-state.mjs';
+
+  const coffee = document.getElementById('coffee-button');
+  const message = document.getElementById('coffee-message');
+
+  if (coffee && message) {
+    const state = createFundTheInkState();
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    const colors = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
+
+    coffee.addEventListener('click', () => {
+      const { message: text, pop } = state.recordClick();
+      if (!text) return;
+
+      message.textContent = text;
+
+      if (pop && !reducedMotion.matches) {
+        const rect = coffee.getBoundingClientRect();
+        for (let i = 0; i < 24; i++) {
+          const piece = document.createElement('span');
+          piece.className = 'confetti-piece';
+          piece.style.left = `${rect.left + rect.width / 2 + (Math.random() * 80 - 40)}px`;
+          piece.style.top = `${rect.top + rect.height / 2}px`;
+          piece.style.background = colors[i % colors.length];
+          piece.style.setProperty('--dx', `${Math.random() * 260 - 130}px`);
+          piece.style.setProperty('--rot', `${Math.random() * 540 - 270}deg`);
+          piece.style.animationDelay = `${Math.random() * 120}ms`;
+          document.body.appendChild(piece);
+          piece.addEventListener('animationend', () => piece.remove());
+          setTimeout(() => piece.remove(), 1800);
+        }
+      }
+    });
+  }
+</script>
 
 <style>
   .channels {
@@ -98,5 +145,30 @@ const channels = [
   .coffee {
     display: block;
     margin-bottom: var(--space-3);
+  }
+
+  .coffee-button {
+    display: block;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .coffee-hint {
+    font-family: var(--font-hand);
+    font-size: 1.2rem;
+    color: var(--ink-70);
+    transform: rotate(-1.2deg);
+    margin: 0 0 var(--space-3);
+  }
+
+  .coffee-message {
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    line-height: 1.35;
+    color: var(--ink);
+    min-height: 1.4em;
+    margin: 0 0 var(--space-2);
   }
 </style>

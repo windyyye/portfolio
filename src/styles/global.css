@@ -434,6 +434,35 @@ a:hover {
   opacity: 0.75;
 }
 
+/* The svelte-confetti look, ported (see contact prototype). */
+.confetti-svelte {
+  position: fixed;
+  z-index: 60;
+  width: calc(var(--size, 10px) * var(--scale, 1));
+  height: calc(var(--size, 10px) * var(--scale, 1) * 0.6);
+  background: var(--color);
+  border-radius: var(--rounded, 2px);
+  pointer-events: none;
+  opacity: 0;
+  animation: svelte-confetti var(--dur, 2s) var(--delay, 0ms) forwards;
+}
+
+@keyframes svelte-confetti {
+  0% {
+    transform: translate(0, 0) skew(0deg, 0deg) rotate3d(0, 0, 1, 0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+        calc(var(--tx) * 260px),
+        calc(var(--ty) * var(--fall, 300px))
+      )
+      skew(var(--skew))
+      rotate3d(var(--rot-xyz), var(--rot-deg));
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

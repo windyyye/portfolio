@@ -120,54 +120,57 @@ const channels = [
     return windowClicks.length;
   }
 
-  // ── confetti: rounded pieces, spread page-wide ──
-  function spawnPieces({ fromTop = false, spread = 1, count = 36, originX = null, sizeMax = 14, durMin = 0.9, durMax = 1.7 }) {
-    if (reducedMotion.matches) return;
-    const colors = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
-    const w = innerWidth;
-    for (let i = 0; i < count; i++) {
-      const piece = document.createElement('span');
-      piece.className = 'proto-piece';
-      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '999px';
-      piece.style.background = colors[i % colors.length];
-      const size = 6 + Math.random() * (sizeMax - 6);
-      piece.style.width = `${Math.round(size * 10) / 10}px`;
-      piece.style.height = `${Math.round(size * (1 + Math.random()) * 10) / 10}px`;
-      if (fromTop) {
-        piece.style.left = `${Math.random() * w}px`;
-        piece.style.top = '-24px';
-        piece.style.setProperty('--dy', `${innerHeight * (0.55 + Math.random() * 0.5)}px`);
-        piece.style.setProperty('--dx', `${Math.random() * 140 - 70}px`);
-        piece.style.animationDuration = `${1.2 + Math.random() * 0.9}s`;
-      } else {
-        const cx = originX ?? w / 2;
-        piece.style.left = `${cx + (Math.random() * 2 - 1) * (w * spread) / 2}px`;
-        piece.style.top = `${innerHeight * 0.22 + Math.random() * innerHeight * 0.34}px`;
-        piece.style.setProperty('--dy', `${140 + Math.random() * 280}px`);
-        piece.style.setProperty('--dx', `${Math.random() * 180 - 90}px`);
-        piece.style.animationDuration = `${durMin + Math.random() * (durMax - durMin)}s`;
-      }
-      piece.style.animationDelay = `${Math.random() * 250}ms`;
-      document.body.appendChild(piece);
-      piece.addEventListener('animationend', () => piece.remove());
-      setTimeout(() => piece.remove(), 2600);
-    }
-  }
-
+  // ── hide every phrase vessel (overlay / banner / bubble) ──
   function clearVessels() {
     for (const id of ['egg-overlay', 'egg-banner', 'egg-bubble']) {
       document.getElementById(id)?.setAttribute('hidden', '');
     }
   }
 
-  // ── per-variant presentation ──
+  // ── confetti: the svelte-confetti look, ported to vanilla CSS ──
+  // (mitcheljager/svelte-confetti is a Svelte component; adopting it
+  // would add the Svelte compiler to an Astro site for one burst.
+  // Its technique is CSS custom props + keyframes, so we port that.)
+  function randBetween(min, max) { return Math.random() * (max - min) + min; }
+
+  function spawnConfetti({ originX, originY, amount = 50, duration = 2000, fallDistance = 300, rounded = true }) {
+    if (reducedMotion.matches) return;
+    const colors = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
+    for (let i = 0; i < amount; i++) {
+      const piece = document.createElement('span');
+      piece.className = 'confetti-svelte';
+      piece.style.setProperty('--color', colors[i % colors.length]);
+      piece.style.setProperty('--skew', `${randBetween(-45, 45)}deg, ${randBetween(-45, 45)}deg`);
+      piece.style.setProperty('--rot-xyz', `${randBetween(-10, 10)}, ${randBetween(-10, 10)}, ${randBetween(-10, 10)}`);
+      piece.style.setProperty('--rot-deg', `${randBetween(0, 360)}deg`);
+      piece.style.setProperty('--ty', randBetween(0.25, 1));
+      piece.style.setProperty('--tx', randBetween(-0.6, 0.6));
+      piece.style.setProperty('--scale', 0.1 * randBetween(2, 10));
+      piece.style.setProperty('--delay', `${randBetween(0, 50)}ms`);
+      piece.style.setProperty('--dur', `${duration}ms`);
+      piece.style.setProperty('--fall', `${fallDistance}px`);
+      piece.style.setProperty('--rounded', rounded ? '50%' : '2px');
+      piece.style.left = `${originX}px`;
+      piece.style.top = `${originY}px`;
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), duration + 400);
+    }
+  }
+
+  function coffeeCenter() {
+    const rect = document.getElementById('coffee-button')?.getBoundingClientRect();
+    return rect
+      ? { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }
+      : { x: innerWidth / 2, y: innerHeight / 3 };
+  }
+
   const presentations = {
     current: {
       onPop(text) {
         clearVessels();
         document.getElementById('coffee-message').textContent = text;
       },
-      burst() { spawnPieces({ spread: 0.12, count: 24, originX: coffeeCenterX() }); },
+      burst() { spawnConfetti({ originX: coffeeCenter().x, originY: coffeeCenter().y, amount: 30, fallDistance: 200 }); },
     },
     spotlight: {
       onPop(text) {
@@ -176,11 +179,11 @@ const channels = [
         document.getElementById('egg-overlay-phrase').textContent = text;
         overlay.hidden = false;
         overlay.classList.add('on');
-        spawnPieces({ spread: 1, count: 44 });
+        spawnConfetti({ originX: innerWidth / 2, originY: innerHeight * 0.35, amount: 60, fallDistance: innerHeight * 0.5 });
         setTimeout(() => overlay.classList.remove('on'), 1400);
         setTimeout(() => overlay.setAttribute('hidden', ''), 1800);
       },
-      burst() { spawnPieces({ spread: 1, count: 44 }); },
+      burst() { spawnConfetti({ originX: innerWidth / 2, originY: innerHeight * 0.35, amount: 60, fallDistance: innerHeight * 0.5 }); },
     },
     bubble: {
       onPop(text, { nudge }) {
@@ -188,10 +191,10 @@ const channels = [
         const bubble = document.getElementById('egg-bubble');
         bubble.textContent = nudge ? `${text} …the jar's right there ↓` : text;
         bubble.hidden = false;
-        spawnPieces({ spread: 0.85, count: 70, originX: coffeeCenterX(), sizeMax: 18, durMin: 1.2, durMax: 2.2 });
-        setTimeout(() => bubble.setAttribute('hidden', ''), 1700);
+        spawnConfetti({ originX: coffeeCenter().x, originY: coffeeCenter().y, amount: 50 });
+        setTimeout(() => bubble.setAttribute('hidden', ''), 2300);
       },
-      burst() { spawnPieces({ spread: 0.85, count: 70, originX: coffeeCenterX(), sizeMax: 18, durMin: 1.2, durMax: 2.2 }); },
+      burst() { spawnConfetti({ originX: coffeeCenter().x, originY: coffeeCenter().y, amount: 50 }); },
     },
     rain: {
       onPop(text) {
@@ -200,18 +203,15 @@ const channels = [
         banner.textContent = text;
         banner.hidden = false;
         banner.classList.add('on');
-        spawnPieces({ fromTop: true, count: 34 });
+        for (let i = 0; i < 3; i++) {
+          spawnConfetti({ originX: innerWidth * (0.2 + 0.3 * i), originY: -20, amount: 20, fallDistance: innerHeight });
+        }
         setTimeout(() => banner.classList.remove('on'), 1500);
         setTimeout(() => banner.setAttribute('hidden', ''), 1900);
       },
-      burst() { spawnPieces({ fromTop: true, count: 34 }); },
+      burst() { spawnConfetti({ originX: innerWidth / 2, originY: -20, amount: 40, fallDistance: innerHeight }); },
     },
   };
-
-  function coffeeCenterX() {
-    const rect = document.getElementById('coffee-button')?.getBoundingClientRect();
-    return rect ? rect.left + rect.width / 2 : innerWidth / 2;
-  }
 
   const mode = presentations[variant] ?? presentations.current;
   const coffee = document.getElementById('coffee-button');

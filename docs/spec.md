@@ -71,7 +71,7 @@ v1 `DESIGN.md` is frozen and must not be extended for new work.
 Unchanged from v1 and re-affirmed by ADR 002:
 
 - Astro static site, Markdown content
-- Firebase Hosting on the `windye` project, `omaopoao.com` custom domain
+- Firebase Hosting on the `windye` project, live URL `windye.web.app` (the `omaopoao.com` domain was released to another project)
 - No backend; free tiers only; no paid assets or services
 - Mobile-friendly, accessible (non-negotiable), fast — Lighthouse 90+ target retained
 - Title and description on every page
@@ -95,7 +95,7 @@ request.
 
 ## Definition of done (v2)
 
-- The diary exists and is live on `omaopoao.com`, and Windy enjoys maintaining it.
+- The diary exists and is live on `windye.web.app`, and Windy enjoys maintaining it.
 - The site feels like a cohesive illustrated book that could belong to no one else.
 - Every claim is true; the v1 honesty bar holds.
 - The visual system is written down in v2 `DESIGN.md` and followed exactly.

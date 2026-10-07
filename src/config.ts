@@ -18,7 +18,7 @@ export const site = {
     'Windy\'s career diary: an illustrated record of what she builds, learns, and decides — kept for fun, not for hire.',
 
   /** Canonical URL (used by Astro for sitemap/robots later). */
-  url: 'https://omaopoao.com',
+  url: 'https://windye.web.app',
 
   /** Locale / time zone shown on the contact page. */
   timezone: 'Asia/Kuala_Lumpur (UTC+8)',

@@ -19,6 +19,8 @@ Generated texture: the paper grain is an inline SVG `feTurbulence` filter define
 
 | File | What | Author | License | Date |
 |---|---|---|---|---|
+| `public/images/kit/coffee-2026-10-07.svg` | Steaming coffee, contact page "Fund the ink" | [Open Doodles](https://opendoodles.com) by Pablo Stanley | CC0 | 2026-10-07 |
+| `public/images/kit/entry-001-rollerskate-2026-10-07.svg` | Figure on roller skates, entry No. 001 — recolored to ink + fluoro pink | [Open Doodles](https://opendoodles.com) by Pablo Stanley (roller-skating) | CC0 | 2026-10-07 |
 | `public/images/kit/masthead-peep-2026-10-06.svg` | Standing peep, home masthead — recolored to ink + paper | [Open Peeps](https://openpeeps.com) by Pablo Stanley (picked by Windy, peep-standing-26) | CC0 | 2026-10-06 |
 | `public/images/masthead-book-sprout.svg` | Open book with sprout — journal index header | Drawn for this repo (agent-drawn, Windy-reviewed) | © windyyye | 2026-10-02 |
 | `public/images/pivot-signpost.svg` | Two-way signpost, entry No. 001 | Drawn for this repo (agent-drawn, Windy-reviewed) | © windyyye | 2026-10-02 |

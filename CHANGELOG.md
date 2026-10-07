@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- Tip-jar easter egg: click the coffee — confetti in the ink set, five escalating phrases, then the author has had enough (resets after 10 seconds). Single sanctioned exception to the motion law, documented in `DESIGN.md` §6.
+- Tip-jar easter egg: click the coffee — canvas-confetti burst in the ink set, five escalating phrases in a speech bubble, then the author has had enough (resets after 10 seconds). Single sanctioned exception to the motion law, documented in `DESIGN.md` §6.
 - Vol. I design system in `DESIGN.md` — illustrated garden with book craft, riso ink palette.
 - Book skeleton: masthead, dotted-leader TOC navigation, numbered entries, colophon, growth stamps.
 - Marginalia: margin notes authored as marked blockquotes (`> margin: …`).

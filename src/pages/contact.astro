@@ -121,7 +121,7 @@ const channels = [
   }
 
   // ── confetti: rounded pieces, spread page-wide ──
-  function spawnPieces({ fromTop = false, spread = 1, count = 36, originX = null }) {
+  function spawnPieces({ fromTop = false, spread = 1, count = 36, originX = null, sizeMax = 14, durMin = 0.9, durMax = 1.7 }) {
     if (reducedMotion.matches) return;
     const colors = ['#2B2520', '#FF48B0', '#0078BF', '#FAF6EE'];
     const w = innerWidth;
@@ -130,6 +130,9 @@ const channels = [
       piece.className = 'proto-piece';
       piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '999px';
       piece.style.background = colors[i % colors.length];
+      const size = 6 + Math.random() * (sizeMax - 6);
+      piece.style.width = `${Math.round(size * 10) / 10}px`;
+      piece.style.height = `${Math.round(size * (1 + Math.random()) * 10) / 10}px`;
       if (fromTop) {
         piece.style.left = `${Math.random() * w}px`;
         piece.style.top = '-24px';
@@ -142,7 +145,7 @@ const channels = [
         piece.style.top = `${innerHeight * 0.22 + Math.random() * innerHeight * 0.34}px`;
         piece.style.setProperty('--dy', `${140 + Math.random() * 280}px`);
         piece.style.setProperty('--dx', `${Math.random() * 180 - 90}px`);
-        piece.style.animationDuration = `${0.9 + Math.random() * 0.8}s`;
+        piece.style.animationDuration = `${durMin + Math.random() * (durMax - durMin)}s`;
       }
       piece.style.animationDelay = `${Math.random() * 250}ms`;
       document.body.appendChild(piece);
@@ -185,10 +188,10 @@ const channels = [
         const bubble = document.getElementById('egg-bubble');
         bubble.textContent = nudge ? `${text} …the jar's right there ↓` : text;
         bubble.hidden = false;
-        spawnPieces({ spread: 0.85, count: 38, originX: coffeeCenterX() });
+        spawnPieces({ spread: 0.85, count: 70, originX: coffeeCenterX(), sizeMax: 18, durMin: 1.2, durMax: 2.2 });
         setTimeout(() => bubble.setAttribute('hidden', ''), 1700);
       },
-      burst() { spawnPieces({ spread: 0.85, count: 38, originX: coffeeCenterX() }); },
+      burst() { spawnPieces({ spread: 0.85, count: 70, originX: coffeeCenterX(), sizeMax: 18, durMin: 1.2, durMax: 2.2 }); },
     },
     rain: {
       onPop(text) {
@@ -382,55 +385,6 @@ const channels = [
     box-shadow: 0 0 60px 30px rgba(250, 246, 238, 0.9);
   }
 
-  .proto-piece {
-    position: fixed;
-    z-index: 60;
-    width: 10px;
-    height: 14px;
-    pointer-events: none;
-    animation: proto-fall ease-in forwards;
-  }
-
-  @keyframes proto-fall {
-    from {
-      transform: translate(0, 0) rotate(0deg);
-      opacity: 1;
-    }
-    to {
-      transform: translate(var(--dx, 0), var(--dy, 160px)) rotate(var(--rot, 220deg));
-      opacity: 0;
-    }
-  }
-
-  .proto-bar {
-    position: fixed;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 999px;
-    padding: 10px 18px;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
-  }
-
-  .proto-bar .proto-arrow {
-    background: none;
-    border: none;
-    color: var(--paper);
-    font-size: 1rem;
-    cursor: pointer;
-    padding: 2px 6px;
-  }
-
-  .proto-bar .proto-readout {
-    opacity: 0.75;
-  }
+  /* .proto-piece / .proto-bar styles live in global.css — these
+     elements are created by JS, so scoped styles never reach them. */
 </style>

@@ -381,6 +381,59 @@ a:hover {
   }
 }
 
+/* Prototype switcher + JS-created confetti (feat/21-coffee-proto).
+   JS-created elements never match scoped page styles — these live
+   here, global, on purpose. */
+.proto-piece {
+  position: fixed;
+  z-index: 60;
+  pointer-events: none;
+  animation: proto-fall ease-in forwards;
+}
+
+@keyframes proto-fall {
+  from {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate(var(--dx, 0), var(--dy, 160px)) rotate(var(--rot, 220deg));
+    opacity: 0;
+  }
+}
+
+.proto-bar {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.proto-bar .proto-arrow {
+  background: none;
+  border: none;
+  color: var(--paper);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.proto-bar .proto-readout {
+  opacity: 0.75;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

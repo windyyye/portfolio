@@ -31,8 +31,8 @@ export const links = {
 
   linkedin: 'https://www.linkedin.com/in/windy-e-8088712b4/',
 
-  /** Ko-fi tip jar — TODO(Windy): create at ko-fi.com and paste the link. */
-  kofi: '',
+  /** Tip jar (Ko-fi). */
+  kofi: 'https://ko-fi.com/windye',
 
   /** Upwork was retired with the v1 objective — see docs/spec.md. */
 } as const;
